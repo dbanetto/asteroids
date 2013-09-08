@@ -163,8 +163,15 @@ void GameWindow::Event (SDL_Event e)
             this->quit = true;
             break;
         case (SDL_KEYDOWN):
-            if (e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.key.keysym.sym == SDLK_ESCAPE) {
             	this->quit = true;
+            }
+        	if (e.key.keysym.sym == SDLK_a) {
+                    player.setAngle(player.getAngle() + 45);
+        	}
+        	if (e.key.keysym.sym == SDLK_d) {
+					player.setAngle(player.getAngle() - 45);
+        	}
             break;
     }
 }

@@ -101,3 +101,10 @@ void Ship::update (int delta)
 {
 
 }
+
+double Ship::getAngle(void) {
+	return this->angle;
+}
+void   Ship::setAngle(double a){
+	this->angle = a;
+}

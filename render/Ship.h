@@ -28,13 +28,17 @@ public:
 	int generateTexture(SDL_Renderer* render);
 	virtual void render (int delta , SDL_Renderer* rednerer);
 	virtual void update (int delta);
-private:
+	double getAngle(void);
+	void   setAngle(double angle);
+protected:
 	std::vector<SDL_Point> points;
 	SDL_Point center;
-	SDL_Texture* texture;
 	SHIP_CONTROLLER controller;
 	//Angle measured in degrees
 	double angle;
+
+private:
+		SDL_Texture* texture;
 };
 
 #endif /* SHIP_H_ */
