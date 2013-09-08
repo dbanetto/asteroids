@@ -12,6 +12,8 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 	this->controller = controller;
 	this->texture = nullptr;
 	this->points = std::vector<SDL_Point>();
+	//Ship design
+	//Add all the points to the point list
 	points.reserve( 7 );
 	SDL_Point pt;
 	pt.x = 32; pt.y = 0;
@@ -40,6 +42,8 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 
 	this->bounds = SDL_Rect();
 	this->bounds.w = 64; this->bounds.h = 64; this->bounds.x = 0; this->bounds.y = 0;
+	this->center.x = 32; this->center.y = 32;
+	this->angle = 0;
 }
 
 Ship::~Ship() {
@@ -66,6 +70,7 @@ int Ship::generateTexture(SDL_Renderer* renderer) {
 		//Change the render target to the Circle target
 		SDL_SetRenderTarget ( renderer, ship );
 
+		//TODO : Make rendered targets have transparency
 		//WHY DOES IT NOT MAKE TRANSPARNT
 		SDL_SetRenderDrawColor ( renderer , 05 , 05 , 05 , 0);
 		//Clean the texture, I think
@@ -89,7 +94,7 @@ int Ship::generateTexture(SDL_Renderer* renderer) {
 void Ship::render (int delta , SDL_Renderer* renderer)
 {
    //Copy texture to the screen
-   SDL_RenderCopy ( renderer , this->texture , NULL , &(this->bounds));
+   SDL_RenderCopyEx ( renderer , this->texture , NULL , &(this->bounds) , this->angle , &(this->center) ,SDL_FLIP_NONE );
 }
 
 void Ship::update (int delta)

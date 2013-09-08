@@ -30,8 +30,11 @@ public:
 	virtual void update (int delta);
 private:
 	std::vector<SDL_Point> points;
+	SDL_Point center;
 	SDL_Texture* texture;
 	SHIP_CONTROLLER controller;
+	//Angle measured in degrees
+	double angle;
 };
 
 #endif /* SHIP_H_ */
