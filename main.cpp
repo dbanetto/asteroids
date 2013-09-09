@@ -7,6 +7,7 @@
 
 
 #include "GameWindow.h"
+#include "util/env.h"
 
 int main (int argc , char* args[]) {
 	//Set background colour
