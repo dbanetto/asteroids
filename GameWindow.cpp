@@ -171,26 +171,27 @@ void GameWindow::Event (SDL_Event e)
             	this->quit = true;
             }
         	if (e.key.keysym.sym == SDLK_a) {
-                    player.setAngle(player.getAngle() - 15);
+                    player.setAngle(player.getAngle() - 45);
         	}
         	if (e.key.keysym.sym == SDLK_d) {
-					player.setAngle(player.getAngle() + 15);
+					player.setAngle(player.getAngle() + 45);
         	}
         	if (e.key.keysym.sym == SDLK_w) {
 				SDL_Point pt = player.getPosition();
 				double angle = player.getAngle();
-				pt.x += cos( (angle / 180.0) * M_PI ) * 10;
-				pt.y += sin( (angle / 180.0) * M_PI ) * 10;
+				pt.x += round( cos( (angle / 180.0) * M_PI )  * 10 );
+				pt.y += round( sin( (angle / 180.0) * M_PI ) * 10 );
 
         		player.setPosition(pt);
 			}
 			if (e.key.keysym.sym == SDLK_s) {
 				SDL_Point pt = player.getPosition();
 				double angle = player.getAngle();
-				pt.x -= cos( (angle / 180.0) * M_PI ) * 10;
-				pt.y -= sin( (angle / 180.0) * M_PI ) * 10;
+				pt.x -= round( cos( (angle / 180.0) * M_PI ) * 10 );
+				pt.y -= round( sin( (angle / 180.0) * M_PI ) * 10 );
 
-        		//player.setPosition(pt);
+
+				player.setPosition(pt);
 			}
             break;
     }
