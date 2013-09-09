@@ -9,6 +9,7 @@
 #define SPRITE_H_
 
 #include "SDL2/SDL.h"
+#include <vector>
 
 class sprite {
 public:
@@ -19,8 +20,17 @@ public:
 
 	SDL_Rect getBounds(void);
 	void setBounds(SDL_Rect rect);
+
+	SDL_Point getPosition(void);
+	void setPosition(SDL_Point pos);
+
 protected:
 	SDL_Rect bounds;
 };
+
+std::vector<SDL_Point> rotate (std::vector<SDL_Point> points, SDL_Point center , double angleDeg);
+void rotate (std::vector<SDL_Point>* points, SDL_Point center , double angleDeg);
+
+bool isPointInsidePolygon(SDL_Point pt , std::vector<SDL_Point>* polygon);
 
 #endif /* SPRITE_H_ */
