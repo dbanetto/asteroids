@@ -13,34 +13,34 @@
 
 class GameWindow {
 public:
-	GameWindow();
-	virtual ~GameWindow();
+     GameWindow();
+     virtual ~GameWindow();
 
-	int Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color BACKGROUND_COLOUR ,  int SDL_SCREEN_FLAGS );
+     int Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color BACKGROUND_COLOUR ,  int SDL_SCREEN_FLAGS );
 
-	void Start(void);
+     void Start(void);
 private:
-	void Render(int delta);
-	void Update(int delta);
-	void Event (SDL_Event e);
-	//Private variables
-	SDL_Renderer* renderer;
-	SDL_Window*   window;
-	bool inited, quit;
+     void Render(int delta);
+     void Update(int delta);
+     void Event (SDL_Event e);
+     //Private variables
+     SDL_Renderer* renderer;
+     SDL_Window*   window;
+     bool inited, quit;
 
-	//Enabled/Disabled capping
-	bool CAP_FPS;
+     //Enabled/Disabled capping
+     bool CAP_FPS;
 
-	//maximum Frames per second Cap
-	int FPS_MAX;
+     //maximum Frames per second Cap
+     int FPS_MAX;
 
-	int CURRENT_FPS;
+     int CURRENT_FPS;
 
-	//init options
-	const char* title =    nullptr;
-	int width, hieght;
-	int SDL_SCREEN_FLAGS;
-	SDL_Color background;
+     //init options
+     const char* title =    nullptr;
+     int width, hieght;
+     int SDL_SCREEN_FLAGS;
+     SDL_Color background;
 };
 
 #endif /* GAMEWINDOW_H_ */

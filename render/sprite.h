@@ -13,19 +13,19 @@
 
 class sprite {
 public:
-	sprite();
-	virtual ~sprite();
-	virtual void render (int delta , SDL_Renderer* rednerer);
-	virtual void update (int delta);
+     sprite();
+     virtual ~sprite();
+     virtual void render (int delta , SDL_Renderer* rednerer);
+     virtual void update (int delta);
 
-	SDL_Rect getBounds(void);
-	void setBounds(SDL_Rect rect);
+     SDL_Rect getBounds(void);
+     void setBounds(SDL_Rect rect);
 
-	SDL_Point getPosition(void);
-	void setPosition(SDL_Point pos);
+     SDL_Point getPosition(void);
+     void setPosition(SDL_Point pos);
 
 protected:
-	SDL_Rect bounds;
+     SDL_Rect bounds;
 };
 
 std::vector<SDL_Point> rotate (std::vector<SDL_Point> points, SDL_Point center , double angleDeg);
