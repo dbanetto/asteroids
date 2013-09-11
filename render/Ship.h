@@ -26,8 +26,9 @@ public:
      virtual ~Ship();
 
      int generateTexture(SDL_Renderer* render);
-     virtual void render (int delta , SDL_Renderer* rednerer);
-     virtual void update (int delta);
+     virtual void render (double delta , SDL_Renderer* rednerer);
+     virtual void update (double delta);
+
 
      double getAngle(void);
      void   setAngle(double angle);

@@ -15,9 +15,9 @@ class sprite {
 public:
      sprite();
      virtual ~sprite();
-     virtual void render (int delta , SDL_Renderer* rednerer);
-     virtual void update (int delta);
-
+     virtual void render (double delta , SDL_Renderer* rednerer);
+     virtual void update (double delta);
+     virtual void event  (SDL_Event event, double delta);
      SDL_Rect getBounds(void);
      void setBounds(SDL_Rect rect);
 

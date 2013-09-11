@@ -19,14 +19,18 @@ sprite::~sprite() {
      // TODO Auto-generated destructor stub
 }
 
-void sprite::render (int delta , SDL_Renderer* rednerer)
+void sprite::render (double delta , SDL_Renderer* rednerer)
 {
      return;
 }
 
-void sprite::update (int delta)
+void sprite::update (double delta)
 {
      return;
+}
+
+void sprite::event (SDL_Event event, double delta) {
+	return;
 }
 
 SDL_Rect sprite::getBounds(void) {

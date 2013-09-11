@@ -9,11 +9,11 @@
 #include <iostream>
 #include "util/Timer.h"
 #include <sstream>
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include "render/Ship.h"
+#include "render/PlayerShip.h"
+#include <cfloat>
 
-Ship player = Ship(SHIP_CONTOLLER_PLAYER);
+
+PlayerShip player = PlayerShip();
 
 GameWindow::GameWindow() {
      if ( SDL_Init(SDL_INIT_EVERYTHING) == -1) {
@@ -24,7 +24,7 @@ GameWindow::GameWindow() {
      TTF_Init();
      //Has not been inited, yet
      this->inited = false;
-
+     this->GAMETIME_MULTIPLIER = 1.0;
      //Pointer safety
      this->window   = nullptr;
      this->renderer = nullptr;
@@ -32,7 +32,7 @@ GameWindow::GameWindow() {
      this->quit = false;
 
      this->CAP_FPS = true;
-     this->FPS_MAX = 60;
+     this->FPS_MAX = 240;
      this->CURRENT_FPS = 0;
 
      this->title = nullptr;
@@ -77,7 +77,7 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     }
 
     //Create Renderer
-    this->renderer = SDL_CreateRenderer (this->window , -1 , SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC  );
+    this->renderer = SDL_CreateRenderer (this->window , -1 , SDL_RENDERER_ACCELERATED  );
     //Make sure it was created correctly
     if (this->renderer == nullptr) {
          std::cout << "An error has occurred" << std::endl;
@@ -109,8 +109,11 @@ void GameWindow::Start() {
           fps.start();
 
           //RENDERS HERE
-          this->Render(delta.get_ticks());
-          this->Update(delta.get_ticks());
+          // change in time in seconds with game-time multiplier to edit game speed
+          double s_delta = (((double)(delta.get_ticks()) * GAMETIME_MULTIPLIER) / 1000.0)  + DBL_MIN;
+          this->Render(s_delta);
+          s_delta = (((double)(delta.get_ticks()) * GAMETIME_MULTIPLIER) / 1000.0)  + DBL_MIN;
+          this->Update(s_delta);
           //Restart Delta
           delta.start();
           //Reset background colour
@@ -142,57 +145,51 @@ void GameWindow::Start() {
      }
 }
 
-void GameWindow::Render(int delta) {
+void GameWindow::Render(double delta) {
      player.render(delta , renderer);
 }
 
-void GameWindow::Update(int delta) {
+void GameWindow::Update(double delta) {
      SDL_Event event;
      while (SDL_PollEvent(&event)) {
-          this->Event(event);
+          this->Event(event , delta);
      }
 
      player.update(delta);
 
      //Update Title
      std::stringstream ss;
-     ss << "Asteroids @ " << this->CURRENT_FPS << "fps";
+     ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " x" << this->GAMETIME_MULTIPLIER;
      SDL_SetWindowTitle(this->window , ss.str().c_str());
 }
 
-void GameWindow::Event (SDL_Event e)
+void GameWindow::Event (SDL_Event e , double delta)
 {
+	player.event(e,delta);
+
     switch (e.type) {
         case (SDL_QUIT):
             this->quit = true;
             break;
         case (SDL_KEYDOWN):
-            if (e.key.keysym.sym == SDLK_ESCAPE) {
-                 this->quit = true;
-            }
-             if (e.key.keysym.sym == SDLK_a) {
-                    player.setAngle(player.getAngle() - 45);
-             }
-             if (e.key.keysym.sym == SDLK_d) {
-                         player.setAngle(player.getAngle() + 45);
-             }
-             if (e.key.keysym.sym == SDLK_w) {
-                    SDL_Point pt = player.getPosition();
-                    double angle = player.getAngle();
-                    pt.x += round( cos( (angle / 180.0) * M_PI )  * 10 );
-                    pt.y += round( sin( (angle / 180.0) * M_PI ) * 10 );
-
-                  player.setPosition(pt);
-               }
-               if (e.key.keysym.sym == SDLK_s) {
-                    SDL_Point pt = player.getPosition();
-                    double angle = player.getAngle();
-                    pt.x -= round( cos( (angle / 180.0) * M_PI ) * 10 );
-                    pt.y -= round( sin( (angle / 180.0) * M_PI ) * 10 );
-
-
-                    player.setPosition(pt);
-               }
+			if (e.key.keysym.sym == SDLK_ESCAPE) {
+				this->quit = true;
+			}
+			if (e.key.keysym.sym == SDLK_p) {
+				this->GAMETIME_MULTIPLIER = 0.1;
+			}
+			if (e.key.keysym.sym == SDLK_l) {
+				this->GAMETIME_MULTIPLIER = 1;
+			}
+			if (e.key.keysym.sym == SDLK_o) {
+				this->GAMETIME_MULTIPLIER = 10;
+			}
+			if (e.key.keysym.sym == SDLK_m) {
+				this->FPS_MAX = 128;
+			}
+			if (e.key.keysym.sym == SDLK_n) {
+				this->FPS_MAX = 64;
+			}
             break;
     }
 }

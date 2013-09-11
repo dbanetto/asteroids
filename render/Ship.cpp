@@ -119,7 +119,7 @@ int Ship::generateTexture(SDL_Renderer* renderer) {
    }
 }
 
-void Ship::render (int delta , SDL_Renderer* renderer)
+void Ship::render (double delta , SDL_Renderer* renderer)
 {
      if (this->RENDER_TEXTURE) {
           this->generateTexture(renderer);
@@ -129,7 +129,7 @@ void Ship::render (int delta , SDL_Renderer* renderer)
    SDL_RenderCopyEx ( renderer , this->texture , NULL , &(this->bounds) , this->angle , &(this->center) ,SDL_FLIP_NONE );
 }
 
-void Ship::update (int delta)
+void Ship::update (double delta)
 {
      if (this->UPDATE_ROTATION) {
           this->boundary_points_rotated = rotate((this->boundary_points) , this->center , this->angle);

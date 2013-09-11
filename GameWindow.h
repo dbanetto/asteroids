@@ -19,10 +19,11 @@ public:
      int Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color BACKGROUND_COLOUR ,  int SDL_SCREEN_FLAGS );
 
      void Start(void);
+protected:
+     void Render(double delta);
+     void Update(double delta);
+     void Event (SDL_Event e , double delta);
 private:
-     void Render(int delta);
-     void Update(int delta);
-     void Event (SDL_Event e);
      //Private variables
      SDL_Renderer* renderer;
      SDL_Window*   window;
@@ -35,9 +36,9 @@ private:
      int FPS_MAX;
 
      int CURRENT_FPS;
-
+     double GAMETIME_MULTIPLIER;
      //init options
-     const char* title =    nullptr;
+     const char* title = nullptr;
      int width, hieght;
      int SDL_SCREEN_FLAGS;
      SDL_Color background;
