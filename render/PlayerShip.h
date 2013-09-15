@@ -16,7 +16,7 @@ public:
 	virtual ~PlayerShip();
 	void update (double delta);
 
-	void event (SDL_Event event, double delta);
+	void input (const Uint8* keys, double delta);
 private:
 	Point momentum;
 	double TURN_RATE;

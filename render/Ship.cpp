@@ -7,7 +7,7 @@
 
 #include "Ship.h"
 #include <cmath>
-
+#include "../util/env.h"
 #include <iostream>
 
 Ship::Ship(SHIP_CONTROLLER controller) {
@@ -70,6 +70,7 @@ Ship::Ship(SHIP_CONTROLLER controller) {
      this->bounds.w = 64; this->bounds.h = 64; this->bounds.x = 0; this->bounds.y = 0;
      this->center.x = 32; this->center.y = 32;
      this->angle = 0;
+
 }
 
 Ship::~Ship() {
@@ -81,46 +82,52 @@ Ship::~Ship() {
 }
 
 int Ship::generateTexture(SDL_Renderer* renderer) {
-     //Clean up any existing texture
+
+	//Clean up any existing texture
      if (SDL_QueryTexture( this->texture , NULL , NULL , NULL , NULL) == 0) {
                //If the query is a  successes then the texture still exists
                SDL_DestroyTexture(this->texture);
-          }
+     }
 
      //Check if the Ship can be pre-rendered and saved as texture
-   if ( SDL_RenderTargetSupported(renderer) ) {
-          //Create backup of current render target
-          SDL_Texture* bck = SDL_GetRenderTarget ( renderer );
-          //Create new texture for the circle to call home*
-          SDL_Texture* ship = SDL_CreateTexture (renderer ,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,this->bounds.w, this->bounds.h);
-          //Change the render target to the Circle target
-          SDL_SetRenderTarget ( renderer, ship );
+	 SDL_Surface* surface = SDL_CreateRGBSurface(0, this->bounds.w, this->bounds.h, 32,
+								   rmask, gmask, bmask, amask);
 
-          //TODO : Make rendered targets have transparency
-          //WHY DOES IT NOT MAKE TRANSPARNT
-          SDL_SetRenderDrawColor ( renderer , 05 , 05 , 05 , 0);
-          //Clean the texture, I think
-          SDL_RenderClear ( renderer );
+	 //Create a software Render with target of surface
+	 SDL_Renderer* swRender = SDL_CreateSoftwareRenderer(surface);
 
-          //Set Ship Colour
-          SDL_SetRenderDrawColor ( renderer , 250 , 250 , 250 , 255);
-          //Render to texture
-          SDL_RenderDrawLines(renderer , &(this->render_points[0]) , this->render_points.size());
+	 //Set Render colour before cleaning
+	 SDL_SetRenderDrawColor ( swRender , 0 , 0 , 0 , 0);
 
-          //Update texture
-          this->texture = ship;
-          //Restore render target
-          SDL_SetRenderTarget ( renderer, bck );
-          this->RENDER_TEXTURE = false;
-          return 0;
-   } else {
-     //Targeted rendering not supported
-        return -1;
-   }
+	 //Clean the render target
+	 SDL_RenderClear ( swRender );
+
+	 //Set Ship Colour
+	 SDL_SetRenderDrawColor ( swRender , 250 , 250 , 250 , 255);
+
+	 //Render to the Render target
+	 SDL_RenderDrawLines(swRender , &(this->render_points[0]) , this->render_points.size());
+
+	 //Convert the surface to a texture, needs main renderer
+	 SDL_Texture* ship = SDL_CreateTextureFromSurface(renderer , surface);
+
+	 //Update texture
+	 this->texture = ship;
+
+	 //Delete render
+	 SDL_DestroyRenderer(swRender);
+
+	 //Free surface
+	 SDL_FreeSurface(surface);
+
+	 this->RENDER_TEXTURE = false;
+
+	 return 0;
 }
 
 void Ship::render (double delta , SDL_Renderer* renderer)
 {
+	//Check if the Texture needs a render update or to be pre-rendered
      if (this->RENDER_TEXTURE) {
           this->generateTexture(renderer);
      }
@@ -142,6 +149,8 @@ double Ship::getAngle(void) {
 }
 
 void   Ship::setAngle(double a){
-     this->angle = fmod(a,360);
-     this->UPDATE_ROTATION = true;
+     //Keep the angle between (-360,360)
+	 this->angle = fmod(a,360);
+     //Set flag to update the collision points next update
+	 this->UPDATE_ROTATION = true;
 }

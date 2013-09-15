@@ -25,7 +25,7 @@ public:
      Ship(SHIP_CONTROLLER controller);
      virtual ~Ship();
 
-     int generateTexture(SDL_Renderer* render);
+     int generateTexture(SDL_Renderer* renderer);
      virtual void render (double delta , SDL_Renderer* rednerer);
      virtual void update (double delta);
 

@@ -137,7 +137,7 @@ void GameWindow::Start() {
           }
 
           if (counter.get_ticks() > 1000) { //1 second worth of frames collected
-               this->CURRENT_FPS = counter_frames / ( counter.get_ticks() / 1000.f );
+               this->CURRENT_FPS = counter_frames / ( counter.get_ticks() / 1000.0 );
 
                counter.start();
                counter_frames = 0;
@@ -155,6 +155,8 @@ void GameWindow::Update(double delta) {
           this->Event(event , delta);
      }
 
+     const Uint8* state = SDL_GetKeyboardState(NULL);
+     player.input(state,delta);
      player.update(delta);
 
      //Update Title
@@ -165,7 +167,6 @@ void GameWindow::Update(double delta) {
 
 void GameWindow::Event (SDL_Event e , double delta)
 {
-	player.event(e,delta);
 
     switch (e.type) {
         case (SDL_QUIT):
