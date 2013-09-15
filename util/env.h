@@ -19,7 +19,7 @@
   #endif
 #endif
 
-#endif
+
 
 //SDL Byte orders
 
@@ -33,4 +33,6 @@
     Uint32 gmask = 0x0000ff00;
     Uint32 bmask = 0x00ff0000;
     Uint32 amask = 0xff000000;
+#endif
+
 #endif

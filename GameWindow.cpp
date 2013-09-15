@@ -10,10 +10,13 @@
 #include "util/Timer.h"
 #include <sstream>
 #include "render/PlayerShip.h"
+#include "render/Asteroid.h"
 #include <cfloat>
 
 
 PlayerShip player = PlayerShip();
+Asteroid asteroid = Asteroid();
+
 
 GameWindow::GameWindow() {
      if ( SDL_Init(SDL_INIT_EVERYTHING) == -1) {
@@ -86,6 +89,7 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     }
     this->inited = true;
     player.generateTexture(this->renderer);
+    asteroid.generateTexture(this->renderer);
     return 0;
 }
 
@@ -147,6 +151,7 @@ void GameWindow::Start() {
 
 void GameWindow::Render(double delta) {
      player.render(delta , renderer);
+     asteroid.render (delta , renderer);
 }
 
 void GameWindow::Update(double delta) {
@@ -158,7 +163,7 @@ void GameWindow::Update(double delta) {
      const Uint8* state = SDL_GetKeyboardState(NULL);
      player.input(state,delta);
      player.update(delta);
-
+     asteroid.update (delta);
      //Update Title
      std::stringstream ss;
      ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER << ")";

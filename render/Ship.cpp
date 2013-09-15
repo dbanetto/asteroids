@@ -7,7 +7,6 @@
 
 #include "Ship.h"
 #include <cmath>
-#include "../util/env.h"
 #include <iostream>
 
 Ship::Ship(SHIP_CONTROLLER controller) {
@@ -81,7 +80,7 @@ Ship::~Ship() {
      }
 }
 
-int Ship::generateTexture(SDL_Renderer* renderer) {
+void Ship::generateTexture(SDL_Renderer* renderer) {
 
 	//Clean up any existing texture
      if (SDL_QueryTexture( this->texture , NULL , NULL , NULL , NULL) == 0) {
@@ -89,40 +88,9 @@ int Ship::generateTexture(SDL_Renderer* renderer) {
                SDL_DestroyTexture(this->texture);
      }
 
-     //Check if the Ship can be pre-rendered and saved as texture
-	 SDL_Surface* surface = SDL_CreateRGBSurface(0, this->bounds.w, this->bounds.h, 32,
-								   rmask, gmask, bmask, amask);
-
-	 //Create a software Render with target of surface
-	 SDL_Renderer* swRender = SDL_CreateSoftwareRenderer(surface);
-
-	 //Set Render colour before cleaning
-	 SDL_SetRenderDrawColor ( swRender , 0 , 0 , 0 , 0);
-
-	 //Clean the render target
-	 SDL_RenderClear ( swRender );
-
-	 //Set Ship Colour
-	 SDL_SetRenderDrawColor ( swRender , 250 , 250 , 250 , 255);
-
-	 //Render to the Render target
-	 SDL_RenderDrawLines(swRender , &(this->render_points[0]) , this->render_points.size());
-
-	 //Convert the surface to a texture, needs main renderer
-	 SDL_Texture* ship = SDL_CreateTextureFromSurface(renderer , surface);
-
-	 //Update texture
-	 this->texture = ship;
-
-	 //Delete render
-	 SDL_DestroyRenderer(swRender);
-
-	 //Free surface
-	 SDL_FreeSurface(surface);
+     this->texture = GenerateTextureLines(renderer , this->bounds , &(this->render_points) );
 
 	 this->RENDER_TEXTURE = false;
-
-	 return 0;
 }
 
 void Ship::render (double delta , SDL_Renderer* renderer)

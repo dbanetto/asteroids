@@ -35,4 +35,6 @@ void rotate (std::vector<SDL_Point>* points, SDL_Point center , double angleDeg)
 
 bool isPointInsidePolygon(SDL_Point pt , std::vector<SDL_Point>* polygon);
 
+SDL_Texture* GenerateTextureLines(SDL_Renderer* renderer, SDL_Rect bounds, std::vector<SDL_Point> *points);
+
 #endif /* SPRITE_H_ */
