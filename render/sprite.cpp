@@ -41,14 +41,13 @@ void sprite::setBounds(SDL_Rect rect) {
      this->bounds = rect;
 }
 
-SDL_Point sprite::getPosition(void) {
-     SDL_Point pt;
-     pt.x = this->bounds.x; pt.y = this->bounds.y;
-     return pt;
+Point sprite::getPosition(void) {
+     return this->position;
 }
-void sprite::setPosition(SDL_Point pt) {
-     this->bounds.x = pt.x;
-     this->bounds.y = pt.y;
+void sprite::setPosition(Point pt) {
+	 this->position =pt;
+	 this->bounds.x = round(pt.x);
+     this->bounds.y = round(pt.y);
 }
 
 /*

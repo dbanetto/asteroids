@@ -10,6 +10,7 @@
 
 #include "SDL2/SDL.h"
 #include <vector>
+#include "../util/Point.h"
 
 class sprite {
 public:
@@ -21,11 +22,12 @@ public:
      SDL_Rect getBounds(void);
      void setBounds(SDL_Rect rect);
 
-     SDL_Point getPosition(void);
-     void setPosition(SDL_Point pos);
+     Point getPosition(void);
+     void setPosition(Point pos);
 
 protected:
      SDL_Rect bounds;
+     Point    position;
 };
 
 std::vector<SDL_Point> rotate (std::vector<SDL_Point> points, SDL_Point center , double angleDeg);

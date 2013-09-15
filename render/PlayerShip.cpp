@@ -24,29 +24,30 @@ PlayerShip::~PlayerShip() {
 void PlayerShip::update(double delta) {
 
 	//Call base class update
-	this->bounds.x += (this->momentum_x * delta);
-	this->bounds.y += (this->momentum_y * delta);
+	this->position.x += (this->momentum_x * delta);
+	this->position.y += (this->momentum_y * delta);
+	this->setPosition(this->position);
 	this->Ship::update(delta);
 }
 
 void PlayerShip::event (SDL_Event e, double delta) {
 	if (e.key.keysym.sym == SDLK_a) {
-		this->angle -= (100 * delta);
+		this->angle -= (10 * delta);
 		return;
 	}
 	if (e.key.keysym.sym == SDLK_d) {
-		this->angle += (100 * delta);
+		this->angle += (10 * delta);
 		return;
 	}
 
 	if (e.key.keysym.sym == SDLK_w) {
-		this->momentum_x += ( cos( (this->angle / 180.0) * M_PI ) * ceil(50 * delta) );
-		this->momentum_y += ( sin( (this->angle / 180.0) * M_PI ) * ceil(50 * delta) );
+		this->momentum_x += ( cos( (this->angle / 180.0) * M_PI ) * ceil(60 * delta) );
+		this->momentum_y += ( sin( (this->angle / 180.0) * M_PI ) * ceil(60 * delta) );
 		return;
 	}
 	if (e.key.keysym.sym == SDLK_s) {
-		this->momentum_x -= ( cos( (this->angle / 180.0) * M_PI ) * ceil(50 * delta));
-		this->momentum_y -= ( sin( (this->angle / 180.0) * M_PI ) * ceil(50 * delta));
+		this->momentum_x -= ( cos( (this->angle / 180.0) * M_PI ) * ceil(60 * delta));
+		this->momentum_y -= ( sin( (this->angle / 180.0) * M_PI ) * ceil(60 * delta));
 		return;
 	}
 }
