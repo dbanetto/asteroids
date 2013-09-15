@@ -15,9 +15,9 @@ public:
 	virtual ~Point();
 	double x , y;
 
-	Point& operator= (const Point& p);
-	Point& operator+ (const Point& p);
-	Point& operator- (const Point& p);
+	Point operator= (const Point& p);
+	Point operator+ (const Point& p);
+	Point operator- (const Point& p);
 };
 
 double Distance (Point* p1 , Point* p2);

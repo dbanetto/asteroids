@@ -29,19 +29,25 @@ double Distance (Point* p1 , Point* p2)
 	return sqrt( pow(p1->x - p2->x, 2) + pow(p1->y - p2->y , 2) );
 }
 
-Point& Point::operator= (const Point& p)
+Point Point::operator= (const Point& p)
 {
-	this->x = p.x;
-	this->y = p.y;
+	Point pt;
+	pt.x = this->x;
+	pt.y = this->y;
+	return pt;
 
 }
-Point& Point::operator+ (const Point& p)
+Point Point::operator+ (const Point& p)
 {
-	this->x += p.x;
-	this->y += p.y;
+	Point pt;
+	pt.x = this->x + p.x;
+	pt.y = this->y + p.y;
+	return pt;
 }
-Point& Point::operator- (const Point& p)
+Point Point::operator- (const Point& p)
 {
-	this->x -= p.x;
-	this->y -= p.y;
+	Point pt;
+	pt.x = this->x - p.x;
+	pt.y = this->y - p.y;
+	return pt;
 }

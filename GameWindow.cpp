@@ -32,7 +32,7 @@ GameWindow::GameWindow() {
      this->quit = false;
 
      this->CAP_FPS = true;
-     this->FPS_MAX = 240;
+     this->FPS_MAX = 60;
      this->CURRENT_FPS = 0;
 
      this->title = nullptr;
@@ -159,7 +159,7 @@ void GameWindow::Update(double delta) {
 
      //Update Title
      std::stringstream ss;
-     ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " x" << this->GAMETIME_MULTIPLIER;
+     ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER << ")";
      SDL_SetWindowTitle(this->window , ss.str().c_str());
 }
 
@@ -185,10 +185,10 @@ void GameWindow::Event (SDL_Event e , double delta)
 				this->GAMETIME_MULTIPLIER = 10;
 			}
 			if (e.key.keysym.sym == SDLK_m) {
-				this->FPS_MAX = 128;
+				this->FPS_MAX = 120;
 			}
 			if (e.key.keysym.sym == SDLK_n) {
-				this->FPS_MAX = 64;
+				this->FPS_MAX = 60;
 			}
             break;
     }

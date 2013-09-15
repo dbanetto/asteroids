@@ -18,7 +18,9 @@ public:
 
 	void event (SDL_Event event, double delta);
 private:
-	double momentum_x , momentum_y;
+	Point momentum;
+	double TURN_RATE;
+	double MOMENTUM_RATE;
 };
 
 #endif /* PLAYERSHIP_H_ */
