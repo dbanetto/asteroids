@@ -8,6 +8,7 @@
 #include "Asteroid.h"
 #include <cstdlib>
 #include <time.h>
+#include <cmath>
 
 Asteroid::Asteroid() : sprite() {
 	// TODO Auto-generated constructor stub

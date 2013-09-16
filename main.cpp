@@ -17,5 +17,3 @@ int main (int argc , char* args[]) {
      main.Start();
      return 0;
 }
-
-
