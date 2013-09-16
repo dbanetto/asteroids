@@ -13,7 +13,7 @@ Asteroid::Asteroid() : sprite() {
 	// TODO Auto-generated constructor stub
 	this->texture = nullptr;
 	this->points.clear();
-	this->points_rotated.clear();
+	this->point_bounds.clear();
 	this->UPDATE_ROTATION = true;
 	this->RENDER_TEXTURE = true;
 	this->bounds.w = 64;
@@ -63,7 +63,11 @@ void Asteroid::generatePoints() {
 		   continue;
 	   }
 	}
+
+	this->point_bounds = this->points;
 	this->points.push_back(this->points[0]);
+	this->RENDER_TEXTURE = true;
+	this->UPDATE_ROTATION = true;
 }
 
 void Asteroid::generateTexture(SDL_Renderer* renderer) {
@@ -73,9 +77,10 @@ void Asteroid::generateTexture(SDL_Renderer* renderer) {
                //If the query is a  successes then the texture still exists
                SDL_DestroyTexture(this->texture);
      }
-
-     this->texture = GenerateTextureLines(renderer , this->bounds , &(this->points) );
-
+     SDL_Color fg; fg.r = 255; fg.g = 255; fg.b = 255; fg.a = 255;
+     SDL_Color bg; bg.a = 0;
+     this->texture = GenerateTextureLines(renderer , this->bounds , &(this->points), fg, bg  );
+     this->RENDER_TEXTURE = false;
 }
 
 void Asteroid::render (double delta , SDL_Renderer* renderer)
@@ -92,7 +97,7 @@ void Asteroid::render (double delta , SDL_Renderer* renderer)
 void Asteroid::update (double delta)
 {
      if (this->UPDATE_ROTATION) {
-          this->points_rotated = rotate((this->points) , this->center , this->angle);
+          this->point_bounds = rotate((this->points) , this->center , this->angle);
           this->UPDATE_ROTATION= false;
      }
 }

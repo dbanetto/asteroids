@@ -39,9 +39,6 @@ protected:
      std::vector<SDL_Point> render_points;
 
      std::vector<SDL_Point> boundary_points;
-     std::vector<SDL_Point> boundary_points_rotated;
-
-     SDL_Point center;
      SHIP_CONTROLLER controller;
      //Angle measured in degrees
      double angle;

@@ -38,6 +38,11 @@ SDL_Rect sprite::getBounds(void) {
      return this->bounds;
 }
 
+std::vector<SDL_Point>* sprite::getPointBounds ()
+{
+	return &(this->point_bounds);
+}
+
 void sprite::setBounds(SDL_Rect rect) {
      this->bounds = rect;
 }
@@ -49,6 +54,10 @@ void sprite::setPosition(Point pt) {
 	 this->position =pt;
 	 this->bounds.x = round(pt.x);
      this->bounds.y = round(pt.y);
+}
+
+SDL_Point sprite::getCenter () {
+	return this->center;
 }
 
 /*
@@ -116,24 +125,60 @@ void rotate (std::vector<SDL_Point>* points, SDL_Point center , double angle)
  * Tests if a given point is within a polygon
  * Using ray casting algorithm http://en.wikipedia.org/wiki/Point_in_polygon
 */
-bool IsPointInsidePolygon (SDL_Point point , std::vector<SDL_Point>* polygon) {
+bool IsPointInsidePolygon (SDL_Point point , std::vector<SDL_Point>* points) {
      //Code converted from pseudo code from http://stackoverflow.com/questions/11716268/point-in-polygon-algorithm
      //Credit for this snippet goes to http://stackoverflow.com/users/1830407/josh
-     int i, j, nvert = (*polygon).size();
-     bool c = false;
+	int i, j, nvert = points->size();
+	  bool c = false;
 
-     for(i = 0, j = nvert - 1; i < nvert; j = i++) {
-     if( ( (((*polygon)[i].y) >= point.y) != (((*polygon)[j].y >= point.y)) ) &&
-          (point.x <= ((*polygon)[j].x - (*polygon)[i].x) * (point.y - (*polygon)[i].y) / ((*polygon)[j].y - (*polygon)[i].y) + (*polygon)[i].x)
-       )
-       c = !c;
-     }
+	  for(i = 0, j = nvert - 1; i < nvert; j = i++) {
+	    if(  ( ( (*points)[i].y ) >= point.y) != ( ((*points)[j].y >= point.y) ) &&
+	        (point.x <= ((*points)[j].x - (*points)[i].x) * (point.y - (*points)[i].y) / ((*points)[j].y - (*points)[i].y) + (*points)[i].x))
 
-     return c;
+	      c = !c;
+	  }
+
+	  return c;
 
 }
 
-SDL_Texture* GenerateTextureLines(SDL_Renderer* renderer, SDL_Rect bounds, std::vector<SDL_Point> *points) {
+bool isPolygonInsidePolygon(std::vector<SDL_Point>* pt , std::vector<SDL_Point>* polygon)
+{
+	//Cycle through all the points of one polygon
+	for (unsigned int i = 0; i < (*pt).size(); i++) {
+		if ( IsPointInsidePolygon( (*pt)[i] , polygon) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool isRectTouching (SDL_Rect aRect, SDL_Rect bRect)
+{
+	/*
+	* Point's for rectangle (x,y) , (x+w,y) , (x+w,y+h) , (x,y+h)
+	* Checks if the points are in the bounds of each other
+	* Pointers to SDL_rect's are used for faster(?) usage of properties
+	*/
+	    if (aRect.x < (bRect.x + bRect.w) && (aRect.x + aRect.w) > bRect.x &&
+	        aRect.y < (bRect.y + bRect.h) && (aRect.y + aRect.h) > bRect.y)
+	    {
+	        return true;
+	    } else {
+	        return false;
+	    }
+}
+
+bool isSpriteTouchingSprite (sprite sp1 , sprite sp2)
+{
+	if ( isRectTouching( sp1.getBounds() , sp2.getBounds() ) ) {
+		bool touching = isPolygonInsidePolygon( sp1.getPointBounds() , sp2.getPointBounds() );
+		return touching;
+	}
+	return false;
+}
+
+SDL_Texture* GenerateTextureLines(SDL_Renderer* renderer, SDL_Rect bounds, std::vector<SDL_Point> *points, SDL_Color fg , SDL_Colour bg) {
     //Check if the Ship can be pre-rendered and saved as texture
 	 SDL_Surface* surface = SDL_CreateRGBSurface(0, bounds.w, bounds.h, 32,
 								   rmask, gmask, bmask, amask);
@@ -142,13 +187,13 @@ SDL_Texture* GenerateTextureLines(SDL_Renderer* renderer, SDL_Rect bounds, std::
 	 SDL_Renderer* swRender = SDL_CreateSoftwareRenderer(surface);
 
 	 //Set Render colour before cleaning
-	 SDL_SetRenderDrawColor ( swRender , 0 , 0 , 0 , 0);
+	 SDL_SetRenderDrawColor ( swRender , bg.r , bg.g , bg.b , bg.a);
 
 	 //Clean the render target
 	 SDL_RenderClear ( swRender );
 
 	 //Set Ship Colour
-	 SDL_SetRenderDrawColor ( swRender , 250 , 250 , 250 , 255);
+	 SDL_SetRenderDrawColor ( swRender , fg.r , fg.g , fg.b , fg.a);
 
 	 //Render to the Render target
 	 SDL_RenderDrawLines(swRender , &( (*points)[0]) , (*points).size());

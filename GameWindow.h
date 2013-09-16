@@ -10,6 +10,7 @@
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_ttf.h"
+#include "render/sprite.h"
 
 class GameWindow {
 public:
@@ -23,11 +24,15 @@ protected:
      void Render(double delta);
      void Update(double delta);
      void Event (SDL_Event e , double delta);
+     void centerVeiwPortOnSprite(sprite* sp);
 private:
      //Private variables
      SDL_Renderer* renderer;
      SDL_Window*   window;
      bool inited, quit;
+
+     //Viewport
+     SDL_Rect viewport;
 
      //Enabled/Disabled capping
      bool CAP_FPS;
@@ -39,9 +44,10 @@ private:
      double GAMETIME_MULTIPLIER;
      //init options
      const char* title = nullptr;
-     int width, hieght;
      int SDL_SCREEN_FLAGS;
      SDL_Color background;
 };
+
+
 
 #endif /* GAMEWINDOW_H_ */

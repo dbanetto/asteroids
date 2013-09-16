@@ -48,8 +48,8 @@ void PlayerShip::input (const Uint8* state, double delta) {
     }
 
     if (state[SDL_SCANCODE_S]) {
-        this->momentum.x -= ( cos( (this->angle / 180.0) * M_PI ) * ceil(this->MOMENTUM_RATE * delta));
-        this->momentum.y -= ( sin( (this->angle / 180.0) * M_PI ) * ceil(this->MOMENTUM_RATE * delta));
+        this->momentum.x -= ( cos( (this->angle / 180.0) * M_PI ) * ceil(this->MOMENTUM_RATE/2 * delta));
+        this->momentum.y -= ( sin( (this->angle / 180.0) * M_PI ) * ceil(this->MOMENTUM_RATE/2 * delta));
     }
 
 }

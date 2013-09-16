@@ -39,8 +39,8 @@ GameWindow::GameWindow() {
      this->CURRENT_FPS = 0;
 
      this->title = nullptr;
-     this->width = 800;
-     this->hieght = 600;
+     this->viewport.w = 800;
+     this->viewport.h = 600;
      this->SDL_SCREEN_FLAGS = SDL_INIT_EVERYTHING;
 }
 
@@ -66,12 +66,13 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
 {
     this->background = Background;
     this->title = TITLE;
-    this->width = WIDTH;
-    this->hieght = HIEGHT;
+    this->viewport.w = WIDTH;
+    this->viewport.h = HIEGHT;
+
     this->SDL_SCREEN_FLAGS = SDL_SCREEN_FLAGS;
 
     //Create Window
-    this->window = SDL_CreateWindow (this->title , SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->width, this->hieght , SDL_SCREEN_FLAGS );
+    this->window = SDL_CreateWindow (this->title , SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->viewport.w, this->viewport.h , SDL_SCREEN_FLAGS );
     //Make sure it was created correctly
     if (this->window == nullptr) {
          std::cout << "An error has occurred" << std::endl;
@@ -80,7 +81,7 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     }
 
     //Create Renderer
-    this->renderer = SDL_CreateRenderer (this->window , -1 , SDL_RENDERER_ACCELERATED  );
+    this->renderer = SDL_CreateRenderer (this->window , -1 , SDL_RENDERER_ACCELERATED );
     //Make sure it was created correctly
     if (this->renderer == nullptr) {
          std::cout << "An error has occurred" << std::endl;
@@ -88,8 +89,6 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
         return 1;
     }
     this->inited = true;
-    player.generateTexture(this->renderer);
-    asteroid.generateTexture(this->renderer);
     return 0;
 }
 
@@ -166,8 +165,10 @@ void GameWindow::Update(double delta) {
      asteroid.update (delta);
      //Update Title
      std::stringstream ss;
-     ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER << ")";
+     ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER << ") " << ( isSpriteTouchingSprite( player , asteroid ) ? "True" : "False" );
      SDL_SetWindowTitle(this->window , ss.str().c_str());
+
+     centerVeiwPortOnSprite(&player);
 }
 
 void GameWindow::Event (SDL_Event e , double delta)
@@ -196,6 +197,16 @@ void GameWindow::Event (SDL_Event e , double delta)
 			if (e.key.keysym.sym == SDLK_n) {
 				this->FPS_MAX = 60;
 			}
+			if (e.key.keysym.sym == SDLK_h) {
+				asteroid.generatePoints();
+			}
             break;
     }
+}
+
+void GameWindow::centerVeiwPortOnSprite(sprite* sp) {
+	this->viewport.x = (sp->getPosition().x + sp->getCenter().x) - (this->viewport.w/2);
+	this->viewport.y = (sp->getPosition().y + sp->getCenter().y) - (this->viewport.h/2);
+
+
 }

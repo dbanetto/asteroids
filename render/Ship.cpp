@@ -16,7 +16,7 @@ Ship::Ship(SHIP_CONTROLLER controller) {
      this->render_points =                std::vector<SDL_Point>();
 
      this->boundary_points =          std::vector<SDL_Point>();
-     this->boundary_points_rotated = std::vector<SDL_Point>();
+     this->point_bounds = std::vector<SDL_Point>();
      this->RENDER_TEXTURE = true;
      this->UPDATE_ROTATION = false;
 
@@ -63,7 +63,7 @@ Ship::Ship(SHIP_CONTROLLER controller) {
      pt.x = 1; pt.y = 64;
      boundary_points.push_back(pt);
      //Copy boundary points to boundary_rotated for initial values
-     this->boundary_points_rotated = this->boundary_points;
+     this->point_bounds = this->boundary_points;
 
      this->bounds = SDL_Rect();
      this->bounds.w = 64; this->bounds.h = 64; this->bounds.x = 0; this->bounds.y = 0;
@@ -87,8 +87,9 @@ void Ship::generateTexture(SDL_Renderer* renderer) {
                //If the query is a  successes then the texture still exists
                SDL_DestroyTexture(this->texture);
      }
-
-     this->texture = GenerateTextureLines(renderer , this->bounds , &(this->render_points) );
+     SDL_Color fg; fg.r = 255; fg.g = 255; fg.b = 255; fg.a = 255;
+     SDL_Color bg; bg.a = 0;
+     this->texture = GenerateTextureLines(renderer , this->bounds , &(this->render_points), fg, bg );
 
 	 this->RENDER_TEXTURE = false;
 }
@@ -107,7 +108,7 @@ void Ship::render (double delta , SDL_Renderer* renderer)
 void Ship::update (double delta)
 {
      if (this->UPDATE_ROTATION) {
-          this->boundary_points_rotated = rotate((this->boundary_points) , this->center , this->angle);
+          this->point_bounds = rotate((this->boundary_points) , this->center , this->angle);
           this->UPDATE_ROTATION= false;
      }
 }

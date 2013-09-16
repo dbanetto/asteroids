@@ -26,7 +26,6 @@ public:
 protected:
 	SDL_Point center;
 	std::vector<SDL_Point> points;
-	std::vector<SDL_Point> points_rotated;
 
 	double angle;
 
