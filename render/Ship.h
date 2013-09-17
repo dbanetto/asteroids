@@ -46,7 +46,6 @@ protected:
 private:
           SDL_Texture* texture;
           bool RENDER_TEXTURE;
-          bool UPDATE_ROTATION;
 };
 
 #endif /* SHIP_H_ */

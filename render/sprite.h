@@ -28,14 +28,16 @@ public:
      std::vector<SDL_Point>* getPointBounds ();
 
 protected:
-     SDL_Rect bounds;
-     Point    position;
+     SDL_Rect  bounds;
+     SDL_Rect  render_bounds;
+     Point     position;
      SDL_Point center;
      std::vector<SDL_Point> point_bounds;
+     bool UPDATE_TRANSLATION;
 };
 
-std::vector<SDL_Point> rotate (std::vector<SDL_Point> points, SDL_Point center , double angleDeg);
-void rotate (std::vector<SDL_Point>* points, SDL_Point center , double angleDeg);
+std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point center , double angleDeg , SDL_Point Offset);
+void translate (std::vector<SDL_Point>* points, SDL_Point center , double angleDeg , SDL_Point OffSet);
 
 bool isPointInsidePolygon(SDL_Point pt , std::vector<SDL_Point>* polygon);
 bool isPolygonInsidePolygon(std::vector<SDL_Point>* pt , std::vector<SDL_Point>* polygon);

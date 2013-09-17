@@ -51,3 +51,11 @@ Point Point::operator- (const Point& p)
 	pt.y = this->y - p.y;
 	return pt;
 }
+
+SDL_Point Point::toSDLPoint()
+{
+	SDL_Point p;
+	p.x = round(this->x);
+	p.y = round(this->y);
+	return p;
+}

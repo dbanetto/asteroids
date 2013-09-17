@@ -13,12 +13,12 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 	// TODO Auto-generated constructor stub
 	this->controller = controller;
 	this->texture = nullptr;
-	this->render_points =                std::vector<SDL_Point>();
+	this->render_points = std::vector<SDL_Point>();
 
-	this->boundary_points =          std::vector<SDL_Point>();
+	this->boundary_points = std::vector<SDL_Point>();
 	this->point_bounds = std::vector<SDL_Point>();
 	this->RENDER_TEXTURE = true;
-	this->UPDATE_ROTATION = false;
+	this->UPDATE_TRANSLATION = false;
 
 	//Add all the points to the point list
 	render_points.reserve( 7 );
@@ -49,10 +49,8 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 	pt.x = 1; pt.y = 64;
 	render_points.push_back(pt);
 
-
-
 	//Boundary Points
-	boundary_points.reserve(3);
+	boundary_points.reserve(4);
 
 	pt.x = 1; pt.y = 0;
 	boundary_points.push_back(pt);
@@ -62,11 +60,15 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 
 	pt.x = 1; pt.y = 64;
 	boundary_points.push_back(pt);
+
+	pt.x = 32; pt.y = 32;
+	boundary_points.push_back(pt);
 	//Copy boundary points to boundary_rotated for initial values
 	this->point_bounds = this->boundary_points;
 
 	this->bounds = SDL_Rect();
 	this->bounds.w = 64; this->bounds.h = 64; this->bounds.x = 0; this->bounds.y = 0;
+	this->render_bounds = this->bounds;
 	this->center.x = 32; this->center.y = 32;
 	this->angle = 0;
 
@@ -100,26 +102,27 @@ void Ship::render (double delta , SDL_Renderer* renderer)
 	if (this->RENDER_TEXTURE) {
 		this->generateTexture(renderer);
 	}
-
+	this->setPosition(this->position);
    //Copy texture to the screen
    SDL_RenderCopyEx ( renderer , this->texture , NULL , &(this->bounds) , this->angle , &(this->center) ,SDL_FLIP_NONE );
 }
 
 void Ship::update (double delta)
 {
-     if (this->UPDATE_ROTATION) {
-          this->point_bounds = rotate((this->boundary_points) , this->center , this->angle);
-          this->UPDATE_ROTATION= false;
-     }
+	if (this->UPDATE_TRANSLATION) {
+		this->setPosition(this->position);
+		this->point_bounds = translate((this->boundary_points) , this->center , this->angle , this->position.toSDLPoint());
+		this->UPDATE_TRANSLATION= false;
+	}
 }
 
 double Ship::getAngle(void) {
-     return this->angle;
+	return this->angle;
 }
 
 void   Ship::setAngle(double a){
-     //Keep the angle between (-360,360)
-	 this->angle = fmod(a,360);
-     //Set flag to update the collision points next update
-	 this->UPDATE_ROTATION = true;
+	//Keep the angle between (-360,360)
+	this->angle = fmod(a,360);
+	//Set flag to update the collision points next update
+	this->UPDATE_TRANSLATION = true;
 }

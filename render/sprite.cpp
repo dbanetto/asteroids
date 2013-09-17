@@ -13,7 +13,7 @@
 
 sprite::sprite() {
      // TODO Auto-generated constructor stub
-
+	this->UPDATE_TRANSLATION = true;
 }
 
 sprite::~sprite() {
@@ -45,15 +45,17 @@ std::vector<SDL_Point>* sprite::getPointBounds ()
 
 void sprite::setBounds(SDL_Rect rect) {
      this->bounds = rect;
+     UPDATE_TRANSLATION = true;
 }
 
 Point sprite::getPosition(void) {
      return this->position;
 }
 void sprite::setPosition(Point pt) {
-	 this->position =pt;
+	 this->position = pt;
 	 this->bounds.x = round(pt.x);
      this->bounds.y = round(pt.y);
+     UPDATE_TRANSLATION = true;
 }
 
 SDL_Point sprite::getCenter () {
@@ -64,7 +66,7 @@ SDL_Point sprite::getCenter () {
  * Rotation using point rotation around the origin ( more here http://en.wikipedia.org/wiki/Rotation_%28mathematics%29 )
  * Angle in degrees
 */
-std::vector<SDL_Point> rotate (std::vector<SDL_Point> points, SDL_Point center , double angle)
+std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point center , double angle, SDL_Point offset)
 {
      //Create output vector
      std::vector<SDL_Point> n_points;
@@ -76,18 +78,17 @@ std::vector<SDL_Point> rotate (std::vector<SDL_Point> points, SDL_Point center ,
      for (unsigned int i = 0; i < points.size(); i++) {
           SDL_Point pt;
           //Offset so the center is the origin of the points
-          pt.x = points[i].x - center.x;
-          pt.y = points[i].y - center.y;
-
+          pt.x = (points[i].x - center.x);
+          pt.y = (points[i].y - center.y);
           //Rotate the point around the origin by angle degrees
 
           int py = pt.y; int px = pt.x;
-          pt.x = (px*a_cos - py*a_sin);
-          pt.y = (px*a_sin + py*a_cos);
+          pt.x = round(px*a_cos - py*a_sin);
+          pt.y = round(px*a_sin + py*a_cos);
 
           //Returning the points back to before the origin change
-          pt.x = pt.x + center.x;
-          pt.y = pt.y + center.y;
+          pt.x = pt.x + center.x + offset.x;
+          pt.y = pt.y + center.y + offset.y;
 
           //Add them to the output list
           n_points.push_back(pt);
@@ -95,7 +96,7 @@ std::vector<SDL_Point> rotate (std::vector<SDL_Point> points, SDL_Point center ,
      return n_points;
 }
 
-void rotate (std::vector<SDL_Point>* points, SDL_Point center , double angle)
+void translate (std::vector<SDL_Point>* points, SDL_Point center , double angle, SDL_Point offset)
 {
      //Pre-calculate sin and cos as they will not change
      double a_sin = sin( (angle / 180.0) * M_PI );
@@ -103,17 +104,17 @@ void rotate (std::vector<SDL_Point>* points, SDL_Point center , double angle)
      for (unsigned int i = 0; i < (*points).size(); i++) {
           SDL_Point pt;
           //Offset so the center is the origin of the points
-          pt.x = (*points)[i].x - center.x;
-          pt.y = (*points)[i].y - center.y;
+          pt.x = ((*points)[i].x - center.x);
+          pt.y = ((*points)[i].y - center.y);
 
           //Rotate the point around the origin by angle degrees
           int py = pt.y; int px = pt.x;
-          pt.x = (px*a_cos - py*a_sin);
-          pt.y = (px*a_sin + py*a_cos);
+          pt.x = round(px*a_cos - py*a_sin);
+          pt.y = round(px*a_sin + py*a_cos);
 
           //Returning the points back to before the origin change
-          pt.x += center.x;
-          pt.y += center.y;
+		  pt.x = pt.x + center.x + offset.x;
+		  pt.y = pt.y + center.y + offset.y;
 
           //Edit the points in the list
           (*points)[i].x = pt.x;
@@ -171,7 +172,8 @@ bool isRectTouching (SDL_Rect aRect, SDL_Rect bRect)
 
 bool isSpriteTouchingSprite (sprite sp1 , sprite sp2)
 {
-	if ( isRectTouching( sp1.getBounds() , sp2.getBounds() ) ) {
+	if ( isRectTouching( sp1.getBounds() , sp2.getBounds() ) )
+	{
 		bool touching = isPolygonInsidePolygon( sp1.getPointBounds() , sp2.getPointBounds() );
 		return touching;
 	}

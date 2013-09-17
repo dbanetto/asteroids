@@ -89,6 +89,11 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
         return 1;
     }
     this->inited = true;
+
+    Point pt_astro;
+    pt_astro.x = 400; pt_astro.y = 300;
+    asteroid.setPosition(pt_astro);
+
     return 0;
 }
 
@@ -165,7 +170,9 @@ void GameWindow::Update(double delta) {
      asteroid.update (delta);
      //Update Title
      std::stringstream ss;
-     ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER << ") " << ( isSpriteTouchingSprite( player , asteroid ) ? "True" : "False" );
+     ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER
+    		 << ") P" << player.getBounds().x <<  "x" << player.getBounds().y <<
+    		 " A" << asteroid.getBounds().x <<  "x" << asteroid.getBounds().y << " " << ( isSpriteTouchingSprite( asteroid, player  ) ? "True" : "False" ) ;
      SDL_SetWindowTitle(this->window , ss.str().c_str());
 
      centerVeiwPortOnSprite(&player);

@@ -21,18 +21,16 @@ PlayerShip::~PlayerShip() {
 }
 
 void PlayerShip::update(double delta) {
-
-
-
-    this->Ship::update(delta);
+	//Call base class update
+	this->position.x += (this->momentum.x * delta);
+	this->position.y += (this->momentum.y * delta);
+	this->setPosition(this->position);
+	this->Ship::update(delta);
 }
 
 void PlayerShip::input (const Uint8* state, double delta) {
 
-	//Call base class update
-    this->position.x += (this->momentum.x * delta);
-    this->position.y += (this->momentum.y * delta);
-    this->setPosition(this->position);
+
 
     if (state[SDL_SCANCODE_A]) {
         this->angle -= (this->TURN_RATE * delta);

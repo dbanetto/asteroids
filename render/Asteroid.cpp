@@ -17,9 +17,10 @@ Asteroid::Asteroid() : sprite() {
 	this->point_bounds.clear();
 	this->UPDATE_ROTATION = true;
 	this->RENDER_TEXTURE = true;
-	this->bounds.w = 64;
-	this->bounds.h = 64;
-
+	this->bounds.w = 64; this->bounds.h = 64;
+	this->position.x = 64; this->position.y = 64;
+	this->render_bounds = this->bounds;
+	this->angle = 0.0;
 	generatePoints();
 }
 
@@ -97,9 +98,10 @@ void Asteroid::render (double delta , SDL_Renderer* renderer)
 
 void Asteroid::update (double delta)
 {
-     if (this->UPDATE_ROTATION) {
-          this->point_bounds = rotate((this->points) , this->center , this->angle);
-          this->UPDATE_ROTATION= false;
+     if (this->UPDATE_TRANSLATION) {
+         this->setPosition(this->position);
+    	 this->point_bounds = translate((this->points) , this->center , this->angle , this->position.toSDLPoint() );
+         this->UPDATE_TRANSLATION = false;
      }
 }
 
@@ -111,5 +113,5 @@ void Asteroid::setAngle(double a){
      //Keep the angle between (-360,360)
 	 this->angle = fmod(a,360);
      //Set flag to update the collision points next update
-	 this->UPDATE_ROTATION = true;
+	 this->UPDATE_TRANSLATION = true;
 }
