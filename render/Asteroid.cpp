@@ -104,14 +104,3 @@ void Asteroid::update (double delta)
          this->UPDATE_TRANSLATION = false;
      }
 }
-
-double Asteroid::getAngle(void) {
-     return this->angle;
-}
-
-void Asteroid::setAngle(double a){
-     //Keep the angle between (-360,360)
-	 this->angle = fmod(a,360);
-     //Set flag to update the collision points next update
-	 this->UPDATE_TRANSLATION = true;
-}

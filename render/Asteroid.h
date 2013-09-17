@@ -21,13 +21,9 @@ public:
     virtual void render (double delta , SDL_Renderer* rednerer);
     virtual void update (double delta);
 
-	double getAngle(void);
-	void   setAngle(double angle);
 protected:
 	SDL_Point center;
 	std::vector<SDL_Point> points;
-
-	double angle;
 
 
 private:

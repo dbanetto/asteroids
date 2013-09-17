@@ -115,14 +115,3 @@ void Ship::update (double delta)
 		this->UPDATE_TRANSLATION= false;
 	}
 }
-
-double Ship::getAngle(void) {
-	return this->angle;
-}
-
-void   Ship::setAngle(double a){
-	//Keep the angle between (-360,360)
-	this->angle = fmod(a,360);
-	//Set flag to update the collision points next update
-	this->UPDATE_TRANSLATION = true;
-}

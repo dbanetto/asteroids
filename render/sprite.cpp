@@ -14,6 +14,7 @@
 sprite::sprite() {
      // TODO Auto-generated constructor stub
 	this->UPDATE_TRANSLATION = true;
+	this->angle = 0;
 }
 
 sprite::~sprite() {
@@ -60,6 +61,17 @@ void sprite::setPosition(Point pt) {
 
 SDL_Point sprite::getCenter () {
 	return this->center;
+}
+
+double sprite::getAngle(void) {
+	return this->angle;
+}
+
+void   sprite::setAngle(double a){
+	//Keep the angle between (-360,360)
+	this->angle = fmod(a,360);
+	//Set flag to update the collision points next update
+	this->UPDATE_TRANSLATION = true;
 }
 
 /*
@@ -143,11 +155,39 @@ bool IsPointInsidePolygon (SDL_Point point , std::vector<SDL_Point>* points) {
 
 }
 
+bool IsPointInsidePolygon (SDL_Point point , std::vector<SDL_Point> points) {
+     //Code converted from pseudo code from http://stackoverflow.com/questions/11716268/point-in-polygon-algorithm
+     //Credit for this snippet goes to http://stackoverflow.com/users/1830407/josh
+	int i, j, nvert = points.size();
+	  bool c = false;
+
+	  for(i = 0, j = nvert - 1; i < nvert; j = i++) {
+	    if(  ( ( (points)[i].y ) >= point.y) != ( ((points)[j].y >= point.y) ) &&
+	        (point.x <= ((points)[j].x - (points)[i].x) * (point.y - (points)[i].y) / ((points)[j].y - (points)[i].y) + (points)[i].x))
+
+	      c = !c;
+	  }
+
+	  return c;
+
+}
+
 bool isPolygonInsidePolygon(std::vector<SDL_Point>* pt , std::vector<SDL_Point>* polygon)
 {
 	//Cycle through all the points of one polygon
 	for (unsigned int i = 0; i < (*pt).size(); i++) {
 		if ( IsPointInsidePolygon( (*pt)[i] , polygon) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool isPolygonInsidePolygon(std::vector<SDL_Point> pt , std::vector<SDL_Point> polygon)
+{
+	//Cycle through all the points of one polygon
+	for (unsigned int i = 0; i < (pt).size(); i++) {
+		if ( IsPointInsidePolygon( (pt)[i] , polygon) ) {
 			return true;
 		}
 	}
@@ -172,7 +212,7 @@ bool isRectTouching (SDL_Rect aRect, SDL_Rect bRect)
 
 bool isSpriteTouchingSprite (sprite sp1 , sprite sp2)
 {
-	if ( isRectTouching( sp1.getBounds() , sp2.getBounds() ) )
+	if ( isPolygonInsidePolygon( RectToPoints(sp1.getBounds(), sp1.getAngle() ) , RectToPoints(sp2.getBounds(), sp2.getAngle() ) ) )
 	{
 		bool touching = isPolygonInsidePolygon( sp1.getPointBounds() , sp2.getPointBounds() );
 		return touching;
@@ -210,4 +250,29 @@ SDL_Texture* GenerateTextureLines(SDL_Renderer* renderer, SDL_Rect bounds, std::
 	 SDL_FreeSurface(surface);
 
 	 return texture;
+}
+
+std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle) {
+	std::vector<SDL_Point> points;
+	points.reserve(4);
+
+	SDL_Point pt , pos;
+	pos.x = rect.x; pos.y = rect.y;
+	pt.x = 0; pt.y = 0;
+	points.push_back(pt);
+
+	pt.x = rect.w; pt.y = 0;
+	points.push_back(pt);
+
+	pt.x = rect.w; pt.y = rect.h;
+	points.push_back(pt);
+
+	pt.x = 0; pt.y = rect.y + rect.h;
+	points.push_back(pt);
+
+	pt.x = rect.w / 2; pt.y = rect.h / 2;
+
+	translate( &points , pt , angle , pos);
+
+	return points;
 }

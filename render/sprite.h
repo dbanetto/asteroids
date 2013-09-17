@@ -22,6 +22,9 @@ public:
      SDL_Rect getBounds(void);
      void setBounds(SDL_Rect rect);
 
+     double getAngle(void);
+     void   setAngle(double angle);
+
      Point getPosition(void);
      void setPosition(Point pos);
      SDL_Point getCenter ();
@@ -34,18 +37,26 @@ protected:
      SDL_Point center;
      std::vector<SDL_Point> point_bounds;
      bool UPDATE_TRANSLATION;
+
+     double angle;
 };
 
 std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point center , double angleDeg , SDL_Point Offset);
 void translate (std::vector<SDL_Point>* points, SDL_Point center , double angleDeg , SDL_Point OffSet);
 
-bool isPointInsidePolygon(SDL_Point pt , std::vector<SDL_Point>* polygon);
-bool isPolygonInsidePolygon(std::vector<SDL_Point>* pt , std::vector<SDL_Point>* polygon);
-bool isRectTouching (SDL_Rect* rect1, SDL_Rect* rect2);
 
+bool isPointInsidePolygon(SDL_Point pt , std::vector<SDL_Point>* polygon);
+bool isPointInsidePolygon(SDL_Point pt , std::vector<SDL_Point> polygon);
+
+
+bool isPolygonInsidePolygon(std::vector<SDL_Point>* pt , std::vector<SDL_Point>* polygon);
+bool isPolygonInsidePolygon(std::vector<SDL_Point> pt , std::vector<SDL_Point> polygon);
+
+bool isRectTouching (SDL_Rect* rect1, SDL_Rect* rect2);
 
 bool isSpriteTouchingSprite (sprite sp1 , sprite sp2);
 
+std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle);
 
 SDL_Texture* GenerateTextureLines(SDL_Renderer* renderer, SDL_Rect bounds, std::vector<SDL_Point> *points, SDL_Color fg , SDL_Colour bg);
 

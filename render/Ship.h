@@ -30,18 +30,12 @@ public:
      virtual void update (double delta);
 
 
-     double getAngle(void);
-     void   setAngle(double angle);
-
-
-
 protected:
      std::vector<SDL_Point> render_points;
 
      std::vector<SDL_Point> boundary_points;
      SHIP_CONTROLLER controller;
      //Angle measured in degrees
-     double angle;
 
 private:
           SDL_Texture* texture;
