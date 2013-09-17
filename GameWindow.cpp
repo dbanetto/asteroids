@@ -12,7 +12,7 @@
 #include "render/PlayerShip.h"
 #include "render/Asteroid.h"
 #include <cfloat>
-
+#include "util/vector.h"
 
 PlayerShip player = PlayerShip();
 Asteroid asteroid = Asteroid();

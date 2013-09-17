@@ -7,7 +7,9 @@
 
 #include "Ship.h"
 #include <cmath>
-#include <iostream>
+
+#include "render.h"
+#include "../util/vector.h"
 
 Ship::Ship(SHIP_CONTROLLER controller) {
 	// TODO Auto-generated constructor stub
@@ -50,7 +52,7 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 	render_points.push_back(pt);
 
 	//Boundary Points
-	boundary_points.reserve(4);
+	boundary_points.reserve(3);
 
 	pt.x = 1; pt.y = 0;
 	boundary_points.push_back(pt);
@@ -61,8 +63,6 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 	pt.x = 1; pt.y = 64;
 	boundary_points.push_back(pt);
 
-	pt.x = 32; pt.y = 32;
-	boundary_points.push_back(pt);
 	//Copy boundary points to boundary_rotated for initial values
 	this->point_bounds = this->boundary_points;
 

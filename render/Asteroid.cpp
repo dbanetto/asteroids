@@ -10,6 +10,9 @@
 #include <time.h>
 #include <cmath>
 
+#include "render.h"
+#include "../util/vector.h"
+
 Asteroid::Asteroid() : sprite() {
 	// TODO Auto-generated constructor stub
 	this->texture = nullptr;
