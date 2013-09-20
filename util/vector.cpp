@@ -136,7 +136,6 @@ bool isRectTouching (SDL_Rect aRect, SDL_Rect bRect)
 	/*
 	* Point's for rectangle (x,y) , (x+w,y) , (x+w,y+h) , (x,y+h)
 	* Checks if the points are in the bounds of each other
-	* Pointers to SDL_rect's are used for faster(?) usage of properties
 	*/
 	    if (aRect.x < (bRect.x + bRect.w) && (aRect.x + aRect.w) > bRect.x &&
 	        aRect.y < (bRect.y + bRect.h) && (aRect.y + aRect.h) > bRect.y)
@@ -198,3 +197,42 @@ std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle) {
 
 	return points;
 }
+
+SDL_Rect RectSubtract (SDL_Rect rect, SDL_Point pt )
+{
+	SDL_Rect rt = rect;
+	rect.x -= pt.x;
+	rect.y -= pt.y;
+	return rt;
+}
+
+bool isWholeRectInside (SDL_Rect small, SDL_Rect big ) {
+	if ( small.x > big.x && small.y > big.y
+	     && (small.x + small.w) < (big.x + big.w) && (small.y + small.h) < (big.y + big.h) ) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
