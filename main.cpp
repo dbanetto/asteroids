@@ -13,7 +13,7 @@ int main (int argc , char* args[]) {
      SDL_Color bg;  bg.r = 25; bg.g = 25; bg.b = 0;
 
      GameWindow main = GameWindow();
-     main.Init("Asteroids" , 800 , 600 , bg , SDL_WINDOW_OPENGL);
+     main.Init("Asteroids" , 1920 , 1080 , bg , SDL_WINDOW_OPENGL);
      main.Start();
      return 0;
 }

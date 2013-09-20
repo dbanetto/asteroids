@@ -103,10 +103,10 @@ void Ship::generateTexture(SDL_Renderer* renderer) {
 	this->RENDER_TEXTURE = false;
 }
 
-void Ship::render (double delta , SDL_Renderer* renderer)
+void Ship::render (double delta , SDL_Renderer* renderer , SDL_Point CameraOffset)
 {
 	SDL_SetRenderDrawColor ( renderer , 255 , 255 , 255 , 255 );
-	std::vector<SDL_Point> r = translate(this->render_points , this->center , this->angle , this->position.toSDLPoint());
+	std::vector<SDL_Point> r = translate(this->render_points , this->center , this->angle ,  PointSubtract(this->position.toSDLPoint() , CameraOffset ));
 	SDL_RenderDrawLines( renderer , &(r[0]) , this->render_points.size() );
 }
 

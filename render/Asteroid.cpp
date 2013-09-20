@@ -80,8 +80,7 @@ void Asteroid::generatePoints() {
 }
 
 void Asteroid::generateTexture(SDL_Renderer* renderer) {
-	//Clean up any existing texture
-
+	 //Clean up any existing texture
      if (SDL_QueryTexture( this->texture , NULL , NULL , NULL , NULL) == 0) {
                //If the query is a  successes then the texture still exists
                SDL_DestroyTexture(this->texture);
@@ -92,10 +91,22 @@ void Asteroid::generateTexture(SDL_Renderer* renderer) {
      this->RENDER_TEXTURE = false;
 }
 
-void Asteroid::render (double delta , SDL_Renderer* renderer)
+void Asteroid::render (double delta , SDL_Renderer* renderer , SDL_Point CameraOffset)
 {
-    SDL_SetRenderDrawColor ( renderer , 255 , 255 , 255 , 255 );
-   	SDL_RenderDrawLines( renderer , &(point_bounds[0]) , this->points.size() );
+	/*
+}
+	//Check if the Texture needs a render update or to be pre-rendered
+	if (this->RENDER_TEXTURE) {
+		this->generateTexture(renderer);
+	}
+
+	//Copy texture to the screen
+	SDL_RenderCopyEx ( renderer , this->texture , NULL , &(this->bounds) , this->angle , &(this->center) , SDL_FLIP_NONE );*/
+
+	SDL_SetRenderDrawColor ( renderer , 255 , 255 , 255 , 255 );
+   	std::vector<SDL_Point> tr = translate ( point_bounds , this->center , 0 , PointSubtract( SDL_Point() , CameraOffset) ) ;
+	SDL_RenderDrawLines( renderer , &(tr[0]) , this->points.size() );
+
 }
 
 void Asteroid::update (double delta)

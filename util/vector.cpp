@@ -22,19 +22,24 @@ std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point cente
      //Reserve the same amount of points
      n_points.reserve(points.size());
      //Pre-calculate sin and cos as they will not change
-     double a_sin = sin( (angle / 180.0) * M_PI );
-     double a_cos = cos( (angle / 180.0) * M_PI );
+     double a_sin = 0;
+     double a_cos = 1;
+     if (angle != NULL) {
+    	 a_sin = sin( (angle / 180.0) * M_PI );
+    	 a_cos = cos( (angle / 180.0) * M_PI );
+     }
      for (unsigned int i = 0; i < points.size(); i++) {
           SDL_Point pt;
           //Offset so the center is the origin of the points
           pt.x = (points[i].x - center.x);
           pt.y = (points[i].y - center.y);
-          //Rotate the point around the origin by angle degrees
-
-          int py = pt.y; int px = pt.x;
-          pt.x = round(px*a_cos - py*a_sin);
-          pt.y = round(px*a_sin + py*a_cos);
-
+          //No rotational translation needed if angle = 0
+          if (angle != NULL) {
+        	  //Rotate the point around the origin by angle degrees
+        	  int py = pt.y; int px = pt.x;
+			  pt.x = round(px*a_cos - py*a_sin);
+			  pt.y = round(px*a_sin + py*a_cos);
+          }
           //Returning the points back to before the origin change
           pt.x = pt.x + center.x + offset.x;
           pt.y = pt.y + center.y + offset.y;
@@ -48,27 +53,34 @@ std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point cente
 void translatept (std::vector<SDL_Point>* points, SDL_Point center , double angle, SDL_Point offset)
 {
      //Pre-calculate sin and cos as they will not change
-     double a_sin = sin( (angle / 180.0) * M_PI );
-     double a_cos = cos( (angle / 180.0) * M_PI );
-     for (unsigned int i = 0; i < (*points).size(); i++) {
-          SDL_Point pt;
-          //Offset so the center is the origin of the points
-          pt.x = ((*points)[i].x - center.x);
-          pt.y = ((*points)[i].y - center.y);
+	double a_sin = 0;
+	double a_cos = 1;
+	if (angle != NULL) {
+		a_sin = sin( (angle / 180.0) * M_PI );
+		a_cos = cos( (angle / 180.0) * M_PI );
+	}
+	for (unsigned int i = 0; i < (*points).size(); i++) {
+		SDL_Point pt;
+		//Offset so the center is the origin of the points
+		pt.x = ((*points)[i].x - center.x);
+		pt.y = ((*points)[i].y - center.y);
 
-          //Rotate the point around the origin by angle degrees
-          int py = pt.y; int px = pt.x;
-          pt.x = round(px*a_cos - py*a_sin);
-          pt.y = round(px*a_sin + py*a_cos);
+        //No rotational translation needed if angle = 0
+        if (angle != NULL) {
+      	  //Rotate the point around the origin by angle degrees
+      	  int py = pt.y; int px = pt.x;
+		  pt.x = round(px*a_cos - py*a_sin);
+		  pt.y = round(px*a_sin + py*a_cos);
+        }
 
-          //Returning the points back to before the origin change
-		  pt.x = pt.x + center.x + offset.x;
-		  pt.y = pt.y + center.y + offset.y;
+		//Returning the points back to before the origin change
+		pt.x = pt.x + center.x + offset.x;
+		pt.y = pt.y + center.y + offset.y;
 
-          //Edit the points in the list
-          (*points)[i].x = pt.x;
-          (*points)[i].y = pt.y;
-     }
+		//Edit the points in the list
+		(*points)[i].x = pt.x;
+		(*points)[i].y = pt.y;
+	}
 }
 
 /*
@@ -172,7 +184,6 @@ bool isSpriteTouchingSprite (sprite sp1 , sprite sp2)
 	return false;
 }
 
-
 std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle) {
 	std::vector<SDL_Point> points;
 	points.reserve(4);
@@ -204,6 +215,20 @@ SDL_Rect RectSubtract (SDL_Rect rect, SDL_Point pt )
 	rect.x -= pt.x;
 	rect.y -= pt.y;
 	return rt;
+}
+
+SDL_Rect RectSubtract (SDL_Rect rect, SDL_Rect pt )
+{
+	SDL_Rect rt = rect;
+	rect.x -= pt.x;
+	rect.y -= pt.y;
+	return rt;
+}
+
+SDL_Point PointSubtract (SDL_Point pt1 , SDL_Point pt2 ) {
+	pt1.x = pt1.x - pt2.x;
+	pt1.y = pt1.y - pt2.y;
+	return pt1;
 }
 
 bool isWholeRectInside (SDL_Rect small, SDL_Rect big ) {

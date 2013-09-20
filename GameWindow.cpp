@@ -93,7 +93,8 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     Point pt_astro;
     pt_astro.x = 400; pt_astro.y = 300;
     asteroid.setPosition(pt_astro);
-
+    this->CameraOffset.x = (player.getPosition().x + player.getCenter().x) - (this->viewport.w/2);
+	this->CameraOffset.y = (player.getPosition().y + player.getCenter().y) - (this->viewport.h/2);
     return 0;
 }
 
@@ -166,8 +167,8 @@ void GameWindow::Start() {
 }
 
 void GameWindow::Render(double delta) {
-     player.render(delta , renderer);
-     asteroid.render (delta , renderer);
+     player.render(delta , renderer , this->CameraOffset);
+     asteroid.render (delta , renderer , this->CameraOffset);
 }
 
 void GameWindow::Update(double delta) {
@@ -184,7 +185,7 @@ void GameWindow::Update(double delta) {
      std::stringstream ss;
      ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER
     		 << ") P" << player.getBounds().x <<  "x" << player.getBounds().y <<
-    		 " A" << asteroid.getBounds().x <<  "x" << asteroid.getBounds().y << " " << ( isSpriteTouchingSprite( asteroid, player  ) ? "True" : "False" ) ;
+    		 " C" << this->CameraOffset.x <<  "x" << this->CameraOffset.x << " " << ( isSpriteTouchingSprite( asteroid, player  ) ? "True" : "False" ) ;
      SDL_SetWindowTitle(this->window , ss.str().c_str());
 
      centerVeiwPortOnSprite(&player);
@@ -224,8 +225,55 @@ void GameWindow::Event (SDL_Event e , double delta)
 }
 
 void GameWindow::centerVeiwPortOnSprite(sprite* sp) {
-	this->viewport.x = (sp->getPosition().x + sp->getCenter().x) - (this->viewport.w/2);
-	this->viewport.y = (sp->getPosition().y + sp->getCenter().y) - (this->viewport.h/2);
+	SDL_Rect camera_movement_bounds;
+	camera_movement_bounds.w = (this->viewport.w*0.9);
+	camera_movement_bounds.h = (this->viewport.h*0.9);
+	camera_movement_bounds.x = this->CameraOffset.x + (this->viewport.w*0.05);
+	camera_movement_bounds.y = this->CameraOffset.y + (this->viewport.h*0.05);
 
+	if ( !isWholeRectInside( sp->getBounds() , camera_movement_bounds ) ) {
+		std::cout << "OUTSIDEISH" << std::endl;
+		SDL_Rect product , sprite_bounds;
+		sprite_bounds = sp->getBounds();
+		SDL_bool b = SDL_IntersectRect( &sprite_bounds , &camera_movement_bounds , &product);
+		if (b == SDL_TRUE) {
+			std::cout << "FOUND SOME GROUND" << std::endl;
+			std::cout << "Product" << product.x << "x" << product.y << ":" << product.w << "x" <<product.h << std::endl;
+			std::cout << "Sprite" << sprite_bounds.x << "x" << sprite_bounds.y << ":" << sprite_bounds.w << "x" <<sprite_bounds.h << std::endl;
+			std::cout  << "Camera" << camera_movement_bounds.x << "x" << camera_movement_bounds.y << ":" << camera_movement_bounds.w << "x" <<camera_movement_bounds.h << std::endl;
 
+			//Time to find out which side of the square the rect is on
+			//Check if the camera needs to move to the RIGHT
+			if ((sprite_bounds.x + sprite_bounds.w) > (camera_movement_bounds.x + camera_movement_bounds.w) ) {
+
+				this->CameraOffset.x += (sprite_bounds.w) - (product.w);
+
+				std::cout << "RIGHT:" << (sprite_bounds.x) - (camera_movement_bounds.x) << std::endl;
+			} else if (sprite_bounds.x < camera_movement_bounds.x ) {
+				//Or check if it needs to move to the LEFT
+
+				this->CameraOffset.x += (sprite_bounds.x) - (product.x);
+
+				std::cout << "LEFT:" << (sprite_bounds.x + sprite_bounds.w) - (camera_movement_bounds.x + camera_movement_bounds.w);
+			}
+
+			if ( (sprite_bounds.y + sprite_bounds.h) > (camera_movement_bounds.y + camera_movement_bounds.h) ) {
+
+				this->CameraOffset.y += (sprite_bounds.h) - (product.h);
+
+				std::cout << "DOWN:" << (sprite_bounds.h) - (product.h) << std::endl;
+			} else if ( sprite_bounds.y < camera_movement_bounds.y  ) {
+				//Or check if it needs to move to the LEFT
+
+				this->CameraOffset.y += (sprite_bounds.y) - (product.y);
+
+				std::cout << "UP:" << (sprite_bounds.y + sprite_bounds.h) - (camera_movement_bounds.y + camera_movement_bounds.h) << std::endl;
+			}
+
+		} else {
+
+		}
+	} else {
+		//
+	}
 }

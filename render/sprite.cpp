@@ -20,7 +20,7 @@ sprite::~sprite() {
      // TODO Auto-generated destructor stub
 }
 
-void sprite::render (double delta , SDL_Renderer* rednerer)
+void sprite::render (double delta , SDL_Renderer* rednerer, SDL_Point CameraOffset)
 {
      return;
 }

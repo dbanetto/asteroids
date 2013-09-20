@@ -18,7 +18,7 @@ public:
 	void generatePoints();
 	void generateTexture(SDL_Renderer* renderer);
 
-    virtual void render (double delta , SDL_Renderer* rednerer);
+    virtual void render (double delta , SDL_Renderer* rednerer , SDL_Point CameraOffset);
     virtual void update (double delta);
 
 protected:

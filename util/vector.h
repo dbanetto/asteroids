@@ -31,6 +31,8 @@ bool isSpriteTouchingSprite (sprite sp1 , sprite sp2);
 std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle);
 
 SDL_Rect RectSubtract (SDL_Rect rect, SDL_Point pt );
+SDL_Rect RectSubtract (SDL_Rect rect, SDL_Rect pt );
 
+SDL_Point PointSubtract (SDL_Point pt1 , SDL_Point pt2 );
 
 #endif /* VECTOR_ */

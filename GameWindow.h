@@ -33,6 +33,7 @@ private:
 
      //Viewport
      SDL_Rect viewport;
+     SDL_Point CameraOffset;
 
      //Enabled/Disabled capping
      bool CAP_FPS;
