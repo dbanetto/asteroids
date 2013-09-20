@@ -214,25 +214,3 @@ bool isWholeRectInside (SDL_Rect small, SDL_Rect big ) {
 		return false;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
