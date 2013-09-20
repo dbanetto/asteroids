@@ -45,7 +45,7 @@ std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point cente
      return n_points;
 }
 
-void translate (std::vector<SDL_Point>* points, SDL_Point center , double angle, SDL_Point offset)
+void translatept (std::vector<SDL_Point>* points, SDL_Point center , double angle, SDL_Point offset)
 {
      //Pre-calculate sin and cos as they will not change
      double a_sin = sin( (angle / 180.0) * M_PI );
@@ -147,9 +147,25 @@ bool isRectTouching (SDL_Rect aRect, SDL_Rect bRect)
 	    }
 }
 
+bool isRectTouching (SDL_Rect* aRect, SDL_Rect* bRect)
+{
+	/*
+	* Point's for rectangle (x,y) , (x+w,y) , (x+w,y+h) , (x,y+h)
+	* Checks if the points are in the bounds of each other
+	* Pointers to SDL_rect's are used for faster(?) usage of properties
+	*/
+	    if (aRect->x < (bRect->x + bRect->w) && (aRect->x + aRect->w) > bRect->x &&
+	        aRect->y < (bRect->y + bRect->h) && (aRect->y + aRect->h) > bRect->y)
+	    {
+	        return true;
+	    } else {
+	        return false;
+	    }
+}
+
 bool isSpriteTouchingSprite (sprite sp1 , sprite sp2)
 {
-	if ( isPolygonInsidePolygon( RectToPoints(sp1.getBounds(), sp1.getAngle() ) , RectToPoints(sp2.getBounds(), sp2.getAngle() ) ) )
+	//if ( isRectTouching( sp1.getBounds() , sp2.getBounds() ) )
 	{
 		bool touching = isPolygonInsidePolygon( sp1.getPointBounds() , sp2.getPointBounds() );
 		return touching;
@@ -178,7 +194,7 @@ std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle) {
 
 	pt.x = rect.w / 2; pt.y = rect.h / 2;
 
-	translate( &points , pt , angle , pos);
+	translatept( &points , pt , angle , pos);
 
 	return points;
 }

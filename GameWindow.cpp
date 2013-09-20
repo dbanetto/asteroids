@@ -98,7 +98,19 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
 }
 
 void GameWindow::Start() {
-     //Update Thread
+    /*
+	Timer tester = Timer();
+    int c_tests = 0;
+    int tests = 1000000;
+    tester.start();
+	while (c_tests < tests) {
+		player.render(0.1 , renderer);
+		c_tests++;
+	}
+	std::cout << "is SDL_RenderDrawPoints = " << tester.get_ticks() << std::endl;
+	tester.stop();*/
+
+	//Update Thread
      Timer fps = Timer();
 
      Timer delta = Timer();

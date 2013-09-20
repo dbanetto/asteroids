@@ -28,6 +28,7 @@ public:
      void setPosition(Point pos);
      SDL_Point getCenter ();
      std::vector<SDL_Point>* getPointBounds ();
+     SDL_Point* getPointBoundsArray ();
 
 protected:
      SDL_Rect  bounds;

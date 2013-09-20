@@ -73,6 +73,10 @@ void Asteroid::generatePoints() {
 	this->points.push_back(this->points[0]);
 	this->RENDER_TEXTURE = true;
 	this->UPDATE_ROTATION = true;
+
+	SDL_EnclosePoints( &(this->point_bounds[0]) , this->point_bounds.size() , NULL , &(this->bounds));
+	this->center.x = this->bounds.w/2;
+	this->center.y = this->bounds.h/2;
 }
 
 void Asteroid::generateTexture(SDL_Renderer* renderer) {
@@ -84,26 +88,26 @@ void Asteroid::generateTexture(SDL_Renderer* renderer) {
      }
      SDL_Color fg; fg.r = 255; fg.g = 255; fg.b = 255; fg.a = 255;
      SDL_Color bg; bg.a = 0;
-     this->texture = GenerateTextureLines(renderer , this->bounds , &(this->points), fg, bg  );
+     this->texture = GenerateTextureLines(renderer , this->render_bounds , &(this->points), fg, bg  );
      this->RENDER_TEXTURE = false;
 }
 
 void Asteroid::render (double delta , SDL_Renderer* renderer)
 {
-	//Check if the Texture needs a render update or to be pre-rendered
-     if (this->RENDER_TEXTURE) {
-          this->generateTexture(renderer);
-     }
-
-   //Copy texture to the screen
-   SDL_RenderCopyEx ( renderer , this->texture , NULL , &(this->bounds) , this->angle , &(this->center) ,SDL_FLIP_NONE );
+    SDL_SetRenderDrawColor ( renderer , 255 , 255 , 255 , 255 );
+   	SDL_RenderDrawLines( renderer , &(point_bounds[0]) , this->points.size() );
 }
 
 void Asteroid::update (double delta)
 {
+	this->angle += 6 * delta ;
+	this->UPDATE_TRANSLATION = true;
      if (this->UPDATE_TRANSLATION) {
-         this->setPosition(this->position);
+
     	 this->point_bounds = translate((this->points) , this->center , this->angle , this->position.toSDLPoint() );
-         this->UPDATE_TRANSLATION = false;
+    	 SDL_EnclosePoints( &(this->point_bounds[0]) , this->point_bounds.size() , NULL , &(this->bounds));
+		 //Sync Rect Bounds to position
+		 this->setPosition(this->position);
+    	 this->UPDATE_TRANSLATION = false;
      }
 }

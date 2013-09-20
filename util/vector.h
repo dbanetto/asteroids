@@ -13,7 +13,7 @@
 #include "../render/sprite.h"
 
 std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point center , double angleDeg , SDL_Point Offset);
-void translate (std::vector<SDL_Point>* points, SDL_Point center , double angleDeg , SDL_Point OffSet);
+void translatept (std::vector<SDL_Point>* points, SDL_Point center , double angleDeg , SDL_Point OffSet);
 
 
 bool isPointInsidePolygon(SDL_Point pt , std::vector<SDL_Point>* polygon);
@@ -24,6 +24,7 @@ bool isPolygonInsidePolygon(std::vector<SDL_Point>* pt , std::vector<SDL_Point>*
 bool isPolygonInsidePolygon(std::vector<SDL_Point> pt , std::vector<SDL_Point> polygon);
 
 bool isRectTouching (SDL_Rect* rect1, SDL_Rect* rect2);
+bool isRectTouching (SDL_Rect rect1, SDL_Rect rect2);
 
 bool isSpriteTouchingSprite (sprite sp1 , sprite sp2);
 

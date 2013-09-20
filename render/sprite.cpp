@@ -38,6 +38,10 @@ SDL_Rect sprite::getBounds(void) {
      return this->bounds;
 }
 
+SDL_Point* sprite::getPointBoundsArray() {
+	return &(this->point_bounds[0]);
+}
+
 std::vector<SDL_Point>* sprite::getPointBounds ()
 {
 	return &(this->point_bounds);
@@ -55,6 +59,8 @@ void sprite::setPosition(Point pt) {
 	 this->position = pt;
 	 this->bounds.x = round(pt.x);
      this->bounds.y = round(pt.y);
+     this->render_bounds.x = round(pt.x);
+	 this->render_bounds.y = round(pt.y);
      UPDATE_TRANSLATION = true;
 }
 

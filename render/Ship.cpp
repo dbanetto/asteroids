@@ -52,7 +52,7 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 	render_points.push_back(pt);
 
 	//Boundary Points
-	boundary_points.reserve(3);
+	boundary_points.reserve(5);
 
 	pt.x = 1; pt.y = 0;
 	boundary_points.push_back(pt);
@@ -61,6 +61,12 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 	boundary_points.push_back(pt);
 
 	pt.x = 1; pt.y = 64;
+	boundary_points.push_back(pt);
+
+	pt.x = 21; pt.y = 32;
+	boundary_points.push_back(pt);
+
+	pt.x = 1; pt.y = 0;
 	boundary_points.push_back(pt);
 
 	//Copy boundary points to boundary_rotated for initial values
@@ -91,27 +97,26 @@ void Ship::generateTexture(SDL_Renderer* renderer) {
 	}
 	SDL_Color fg; fg.r = 255; fg.g = 255; fg.b = 255; fg.a = 255;
 	SDL_Color bg; bg.a = 0;
-	this->texture = GenerateTextureLines(renderer , this->bounds , &(this->render_points), fg, bg );
+	std::vector<SDL_Point> r = translate(this->render_points , this->center , this->angle , this->position.toSDLPoint());
+	this->texture = GenerateTextureLines(renderer , this->bounds , &r, fg, bg );
 
 	this->RENDER_TEXTURE = false;
 }
 
 void Ship::render (double delta , SDL_Renderer* renderer)
 {
-	//Check if the Texture needs a render update or to be pre-rendered
-	if (this->RENDER_TEXTURE) {
-		this->generateTexture(renderer);
-	}
-	this->setPosition(this->position);
-   //Copy texture to the screen
-   SDL_RenderCopyEx ( renderer , this->texture , NULL , &(this->bounds) , this->angle , &(this->center) ,SDL_FLIP_NONE );
+	SDL_SetRenderDrawColor ( renderer , 255 , 255 , 255 , 255 );
+	std::vector<SDL_Point> r = translate(this->render_points , this->center , this->angle , this->position.toSDLPoint());
+	SDL_RenderDrawLines( renderer , &(r[0]) , this->render_points.size() );
 }
 
 void Ship::update (double delta)
 {
 	if (this->UPDATE_TRANSLATION) {
-		this->setPosition(this->position);
 		this->point_bounds = translate((this->boundary_points) , this->center , this->angle , this->position.toSDLPoint());
-		this->UPDATE_TRANSLATION= false;
+		SDL_EnclosePoints( &(this->point_bounds[0]) , this->point_bounds.size() , NULL , &(this->bounds));
+		//Sync Rect Bounds to position
+		this->setPosition(this->position);
+		this->UPDATE_TRANSLATION = false;
 	}
 }
