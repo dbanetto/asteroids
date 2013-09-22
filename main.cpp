@@ -10,10 +10,10 @@
 
 int main (int argc , char* args[]) {
      //Set background colour
-     SDL_Color bg;  bg.r = 25; bg.g = 25; bg.b = 0;
+     SDL_Color bg;  bg.r = 0; bg.g = 0; bg.b = 0;
 
      GameWindow main = GameWindow();
-     main.Init("Asteroids" , 1920 , 1080 , bg , SDL_WINDOW_OPENGL);
+     main.Init("Asteroids" , 1280 , 720 , bg , SDL_WINDOW_OPENGL);
      main.Start();
      return 0;
 }

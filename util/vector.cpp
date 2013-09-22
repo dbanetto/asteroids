@@ -24,7 +24,7 @@ std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point cente
      //Pre-calculate sin and cos as they will not change
      double a_sin = 0;
      double a_cos = 1;
-     if (angle != NULL) {
+     if (angle != 0) {
     	 a_sin = sin( (angle / 180.0) * M_PI );
     	 a_cos = cos( (angle / 180.0) * M_PI );
      }
@@ -34,7 +34,7 @@ std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point cente
           pt.x = (points[i].x - center.x);
           pt.y = (points[i].y - center.y);
           //No rotational translation needed if angle = 0
-          if (angle != NULL) {
+          if (angle != 0) {
         	  //Rotate the point around the origin by angle degrees
         	  int py = pt.y; int px = pt.x;
 			  pt.x = round(px*a_cos - py*a_sin);
@@ -55,7 +55,7 @@ void translatept (std::vector<SDL_Point>* points, SDL_Point center , double angl
      //Pre-calculate sin and cos as they will not change
 	double a_sin = 0;
 	double a_cos = 1;
-	if (angle != NULL) {
+	if (angle != 0) {
 		a_sin = sin( (angle / 180.0) * M_PI );
 		a_cos = cos( (angle / 180.0) * M_PI );
 	}
@@ -66,7 +66,7 @@ void translatept (std::vector<SDL_Point>* points, SDL_Point center , double angl
 		pt.y = ((*points)[i].y - center.y);
 
         //No rotational translation needed if angle = 0
-        if (angle != NULL) {
+        if (angle != 0) {
       	  //Rotate the point around the origin by angle degrees
       	  int py = pt.y; int px = pt.x;
 		  pt.x = round(px*a_cos - py*a_sin);
