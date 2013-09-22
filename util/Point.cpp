@@ -31,10 +31,8 @@ double Distance (Point* p1 , Point* p2)
 
 Point Point::operator= (const Point& p)
 {
-	Point pt;
-	pt.x = this->x;
-	pt.y = this->y;
-	return pt;
+	this->x = p.x;
+	this->y = p.y;
 
 }
 Point Point::operator+ (const Point& p)

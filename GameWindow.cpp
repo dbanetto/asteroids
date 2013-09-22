@@ -19,7 +19,7 @@
 PlayerShip player = PlayerShip();
 Asteroid asteroid = Asteroid();
 
-std::vector<sprite> sprites;
+std::vector<Asteroid> sprites;
 AreaMap sprite_map;
 
 GameWindow::GameWindow() {
@@ -100,18 +100,27 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     pt_ast.x = 400; pt_ast.y = 300;
     asteroid.setPosition(pt_ast);
 
-    sprites.reserve(100);
-
-    for (int counter = 0; counter < 100; counter++) {
-    	Asteroid asrto = Asteroid();
+    sprites.reserve(1000);
+    unsigned int seed = SDL_GetTicks();
+    srand( seed );
+    Asteroid asrto;
+    for (int counter = 0; counter < 64; counter++) {
+    	srand( seed * counter );
+    	asrto = Asteroid();
+    	SDL_Rect astro_b;
     	Point pt_astro;
-		pt_astro.x = counter*32;
-		pt_astro.y = counter;
+    	astro_b.w = (rand() * counter) % 64 + 32;
+    	astro_b.h = (rand() * counter) % 64 + 32;
+    	asrto.setBounds(astro_b);
+    	asrto.generatePoints();
+    	pt_astro.x = (rand() * counter) % 800;
+		pt_astro.y = (rand() * counter) % 600;
 
 		asrto.setPosition(pt_astro);
-		sprite sp = (sprite)(asrto);
-		sprites.push_back(sp);
-		sprite_map.insert(&sp);
+		//asrto.update(0);
+
+		sprites.push_back(asrto);
+		sprite_map.insert(&(sprites[counter]));
     }
 
     return 0;
@@ -190,9 +199,9 @@ void GameWindow::Render(double delta) {
      asteroid.render (delta , renderer , this->camera.getCameraOffset());
 
      std::vector<sprite*> render_sprites = sprite_map.getSpritesFromArea(this->camera.getViewPort());
-     std::cout << render_sprites.size() << std::endl;
      for (unsigned int i = 0; i < render_sprites.size(); i++ ) {
-    	 render_sprites[i]->render(delta , renderer , this->camera.getCameraOffset());
+    	 Asteroid* a_ptr = static_cast<Asteroid *>(render_sprites[i]);
+    	 a_ptr->render(delta , renderer , this->camera.getCameraOffset());
      }
 
 }

@@ -33,16 +33,17 @@ Asteroid::~Asteroid() {
 
 void Asteroid::generatePoints() {
 	//Generate Circle with the range from 0 to 2pi
-	float steps = M_PI / 5;
+	int points = rand() % 5 + 5;
+	float steps = M_PI / points;
 	this->points.clear();
 	this->points = std::vector<SDL_Point>();
-	this->points.reserve(6);
+	this->points.reserve(points + 1);
 
 	SDL_Point center;
 	center.x = 32;
 	center.y = 32;
 	//Start random number gen
-	srand( time(NULL) );
+	//srand( time(NULL) );
 
 	for (float angle = 0; angle < 2 * M_PI; angle += steps) {
 

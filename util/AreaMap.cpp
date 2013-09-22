@@ -56,12 +56,7 @@ void AreaMap::insert(sprite* sp) {
 std::vector<sprite*> AreaMap::getSpritesFromArea (SDL_Rect Area) {
 	std::vector<sprite*> output;
 	for (unsigned int i = 0; i < this->sprites.size(); i++) {
-
-		SDL_Rect sp = (this->sprites[i]->getBounds());
-		assert (SDL_RectEmpty(&sp) == SDL_FALSE);
-
 		if ( isRectTouching( this->sprites[i]->getBounds() , Area ) ) {
-			std::cout << "found something" << std::endl;
 			output.push_back(this->sprites[i]);
 		}
 	}
