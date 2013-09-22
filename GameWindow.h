@@ -11,6 +11,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_ttf.h"
 #include "render/sprite.h"
+#include "util/Camera.h"
 
 class GameWindow {
 public:
@@ -32,8 +33,7 @@ private:
      bool inited, quit;
 
      //Viewport
-     SDL_Rect viewport;
-     SDL_Point CameraOffset;
+     Camera camera;
 
      //Enabled/Disabled capping
      bool CAP_FPS;
@@ -47,6 +47,7 @@ private:
      const char* title = nullptr;
      int SDL_SCREEN_FLAGS;
      SDL_Color background;
+
 };
 
 
