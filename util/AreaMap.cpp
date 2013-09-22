@@ -8,6 +8,9 @@
 #include "AreaMap.h"
 #include <limits>
 #include "vector.h"
+#include <iostream>
+#include <cassert>
+#include <cmath>
 
 AreaMap::AreaMap() {
 	// TODO Auto-generated constructor stub
@@ -16,7 +19,7 @@ AreaMap::AreaMap() {
 	this->area.x = std::numeric_limits<int>::min()/2;
 	this->area.y = std::numeric_limits<int>::min()/2;
 	//Maximum amount of area possible
-	this->area.x = std::numeric_limits<int>::max();
+	this->area.h = std::numeric_limits<int>::max();
 	this->area.w = std::numeric_limits<int>::max();
 
 	children.reserve(4);
@@ -33,7 +36,7 @@ AreaMap::AreaMap(AreaMap* Parent , SDL_Rect Area) {
 }
 
 void AreaMap::insert(sprite* sp) {
-	if (this->sprites.size() > 4) {
+	if (this->sprites.size() > 4 || this->children.size() == 4) {
 		//Haven't split yet, might as well
 		if (this->children.size() != 4) {
 			this->split();
@@ -41,7 +44,7 @@ void AreaMap::insert(sprite* sp) {
 		//Go through children to see if they want it
 		for (unsigned int n = 0; n < this->children.size(); n++) {
 			//Check if the sprite belongs to this child's area
-			if ( isWholeRectInside( sp->getBounds() ,this->children[n].getArea() ) ) {
+			if ( isWholeRectInside( sp->getBounds() , this->children[n].getArea() ) ) {
 				this->children[n].insert(sp);
 				return;
 			}
@@ -53,7 +56,12 @@ void AreaMap::insert(sprite* sp) {
 std::vector<sprite*> AreaMap::getSpritesFromArea (SDL_Rect Area) {
 	std::vector<sprite*> output;
 	for (unsigned int i = 0; i < this->sprites.size(); i++) {
+
+		SDL_Rect sp = (this->sprites[i]->getBounds());
+		assert (SDL_RectEmpty(&sp) == SDL_FALSE);
+
 		if ( isRectTouching( this->sprites[i]->getBounds() , Area ) ) {
+			std::cout << "found something" << std::endl;
 			output.push_back(this->sprites[i]);
 		}
 	}
@@ -77,7 +85,8 @@ void AreaMap::split() {
 	{
 		SDL_Rect new_area;
 		//Width and height will remain const
-		new_area.w = this->area.w/2; new_area.h = this->area.h/2;
+		new_area.w = this->area.w/2;
+		new_area.h = this->area.h/2;
 		//Position of the rect will change to the four sections
 
 		//Top left
@@ -111,4 +120,5 @@ void AreaMap::split() {
 			leftovers.push_back(sprites[i]);
 		}
 	}
+	this->sprites = leftovers;
 }

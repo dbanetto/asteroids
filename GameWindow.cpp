@@ -13,10 +13,14 @@
 #include "render/Asteroid.h"
 #include <cfloat>
 #include "util/vector.h"
+#include <vector>
+#include "util/AreaMap.h"
 
 PlayerShip player = PlayerShip();
 Asteroid asteroid = Asteroid();
 
+std::vector<sprite> sprites;
+AreaMap sprite_map;
 
 GameWindow::GameWindow() {
      if ( SDL_Init(SDL_INIT_EVERYTHING) == -1) {
@@ -92,11 +96,24 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     }
     this->inited = true;
 
-    Point pt_astro;
-    pt_astro.x = 400; pt_astro.y = 300;
-    asteroid.setPosition(pt_astro);
-    //this->CameraOffset.x = (player.getPosition().x + player.getCenter().x) - (this->viewport.w/2);
-	//this->CameraOffset.y = (player.getPosition().y + player.getCenter().y) - (this->viewport.h/2);
+    Point pt_ast;
+    pt_ast.x = 400; pt_ast.y = 300;
+    asteroid.setPosition(pt_ast);
+
+    sprites.reserve(100);
+
+    for (int counter = 0; counter < 100; counter++) {
+    	Asteroid asrto = Asteroid();
+    	Point pt_astro;
+		pt_astro.x = counter*32;
+		pt_astro.y = counter;
+
+		asrto.setPosition(pt_astro);
+		sprite sp = (sprite)(asrto);
+		sprites.push_back(sp);
+		sprite_map.insert(&sp);
+    }
+
     return 0;
 }
 
@@ -171,6 +188,13 @@ void GameWindow::Start() {
 void GameWindow::Render(double delta) {
      player.render(delta , renderer , this->camera.getCameraOffset());
      asteroid.render (delta , renderer , this->camera.getCameraOffset());
+
+     std::vector<sprite*> render_sprites = sprite_map.getSpritesFromArea(this->camera.getViewPort());
+     std::cout << render_sprites.size() << std::endl;
+     for (unsigned int i = 0; i < render_sprites.size(); i++ ) {
+    	 render_sprites[i]->render(delta , renderer , this->camera.getCameraOffset());
+     }
+
 }
 
 void GameWindow::Update(double delta) {
@@ -178,7 +202,9 @@ void GameWindow::Update(double delta) {
      while (SDL_PollEvent(&event)) {
           this->Event(event , delta);
      }
-
+     for (unsigned int i = 0; i < sprites.size(); i++ ) {
+    	 sprites[i].update(delta);
+     }
      const Uint8* state = SDL_GetKeyboardState(NULL);
      player.input(state,delta);
      player.update(delta);
@@ -186,7 +212,7 @@ void GameWindow::Update(double delta) {
      //Update Title
      std::stringstream ss;
      ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER
-    		 << ")";
+    		 << ")" << "sp:" << sprites.size();
      SDL_SetWindowTitle(this->window , ss.str().c_str());
 
      camera.BoxMoveWithSprite(&player);
