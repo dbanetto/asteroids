@@ -176,7 +176,7 @@ bool isRectTouching (SDL_Rect* aRect, SDL_Rect* bRect)
 
 bool isSpriteTouchingSprite (sprite sp1 , sprite sp2)
 {
-	//if ( isRectTouching( sp1.getBounds() , sp2.getBounds() ) )
+	if ( isRectTouching( sp1.getBounds() , sp2.getBounds() ) )
 	{
 		bool touching = isPolygonInsidePolygon( sp1.getPointBounds() , sp2.getPointBounds() );
 		return touching;
