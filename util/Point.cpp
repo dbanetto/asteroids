@@ -37,17 +37,13 @@ Point Point::operator= (const Point& p)
 }
 Point Point::operator+ (const Point& p)
 {
-	Point pt;
-	pt.x = this->x + p.x;
-	pt.y = this->y + p.y;
-	return pt;
+	this->x += p.x;
+	this->y += p.y;
 }
 Point Point::operator- (const Point& p)
 {
-	Point pt;
-	pt.x = this->x - p.x;
-	pt.y = this->y - p.y;
-	return pt;
+	this->x -= p.x;
+	this->y -= p.y;
 }
 
 SDL_Point Point::toSDLPoint()
