@@ -35,4 +35,6 @@ SDL_Rect RectSubtract (SDL_Rect rect, SDL_Rect pt );
 
 SDL_Point PointSubtract (SDL_Point pt1 , SDL_Point pt2 );
 
+
+double distance (SDL_Point p1 , SDL_Point p2);
 #endif /* VECTOR_ */

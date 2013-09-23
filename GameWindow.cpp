@@ -16,6 +16,8 @@
 #include <vector>
 #include "util/AreaMap.h"
 
+
+
 PlayerShip player = PlayerShip();
 Asteroid asteroid = Asteroid();
 
@@ -117,7 +119,6 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
 		pt_astro.y = (rand() * counter) % 600;
 
 		asrto.setPosition(pt_astro);
-		//asrto.update(0);
 
 		sprites.push_back(asrto);
 		sprite_map.insert(&(sprites[counter]));

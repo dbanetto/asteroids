@@ -9,9 +9,11 @@
 #include <cstdlib>
 #include <time.h>
 #include <cmath>
-
+#include "../util/area.h"
 #include "render.h"
 #include "../util/vector.h"
+
+#include <iostream>
 
 Asteroid::Asteroid() : sprite() {
 	// TODO Auto-generated constructor stub
@@ -78,6 +80,8 @@ void Asteroid::generatePoints() {
 	SDL_EnclosePoints( &(this->point_bounds[0]) , this->point_bounds.size() , NULL , &(this->bounds));
 	this->center.x = this->bounds.w/2;
 	this->center.y = this->bounds.h/2;
+
+
 }
 
 void Asteroid::generateTexture(SDL_Renderer* renderer) {
@@ -94,16 +98,6 @@ void Asteroid::generateTexture(SDL_Renderer* renderer) {
 
 void Asteroid::render (double delta , SDL_Renderer* renderer , SDL_Point CameraOffset)
 {
-	/*
-}
-	//Check if the Texture needs a render update or to be pre-rendered
-	if (this->RENDER_TEXTURE) {
-		this->generateTexture(renderer);
-	}
-
-	//Copy texture to the screen
-	SDL_RenderCopyEx ( renderer , this->texture , NULL , &(this->bounds) , this->angle , &(this->center) , SDL_FLIP_NONE );*/
-
 	SDL_SetRenderDrawColor ( renderer , 255 , 255 , 255 , 255 );
    	std::vector<SDL_Point> tr = translate ( point_bounds , this->center , 0 , PointSubtract( SDL_Point() , CameraOffset) ) ;
 	SDL_RenderDrawLines( renderer , &(tr[0]) , this->points.size() );
