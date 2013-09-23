@@ -79,7 +79,12 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     this->SDL_SCREEN_FLAGS = SDL_SCREEN_FLAGS;
 
     //Create Window
-    this->window = SDL_CreateWindow (this->title , SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, viewport.w, viewport.h , SDL_SCREEN_FLAGS );
+    this->window = SDL_CreateWindow (this->title
+    				, SDL_WINDOWPOS_UNDEFINED
+    				, SDL_WINDOWPOS_UNDEFINED
+    				, viewport.w
+    				, viewport.h
+    				, SDL_SCREEN_FLAGS );
     //Make sure it was created correctly
     if (this->window == nullptr) {
          std::cout << "An error has occurred" << std::endl;
