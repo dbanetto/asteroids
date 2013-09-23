@@ -105,19 +105,8 @@ bool IsPointInsidePolygon (SDL_Point point , std::vector<SDL_Point>* points) {
 }
 
 bool IsPointInsidePolygon (SDL_Point point , std::vector<SDL_Point> points) {
-     //Code converted from pseudo code from http://stackoverflow.com/questions/11716268/point-in-polygon-algorithm
-     //Credit for this snippet goes to http://stackoverflow.com/users/1830407/josh
-	int i, j, nvert = points.size();
-	  bool c = false;
 
-	  for(i = 0, j = nvert - 1; i < nvert; j = i++) {
-	    if(  ( ( (points)[i].y ) >= point.y) != ( ((points)[j].y >= point.y) ) &&
-	        (point.x <= ((points)[j].x - (points)[i].x) * (point.y - (points)[i].y) / ((points)[j].y - (points)[i].y) + (points)[i].x))
-
-	      c = !c;
-	  }
-
-	  return c;
+	return IsPointInsidePolygon(point , &points);
 
 }
 
@@ -134,28 +123,12 @@ bool isPolygonInsidePolygon(std::vector<SDL_Point>* pt , std::vector<SDL_Point>*
 
 bool isPolygonInsidePolygon(std::vector<SDL_Point> pt , std::vector<SDL_Point> polygon)
 {
-	//Cycle through all the points of one polygon
-	for (unsigned int i = 0; i < (pt).size(); i++) {
-		if ( IsPointInsidePolygon( (pt)[i] , polygon) ) {
-			return true;
-		}
-	}
-	return false;
+	return isPolygonInsidePolygon(&pt , &polygon);
 }
 
 bool isRectTouching (SDL_Rect aRect, SDL_Rect bRect)
 {
-	/*
-	* Point's for rectangle (x,y) , (x+w,y) , (x+w,y+h) , (x,y+h)
-	* Checks if the points are in the bounds of each other
-	*/
-	    if (aRect.x < (bRect.x + bRect.w) && (aRect.x + aRect.w) > bRect.x &&
-	        aRect.y < (bRect.y + bRect.h) && (aRect.y + aRect.h) > bRect.y)
-	    {
-	        return true;
-	    } else {
-	        return false;
-	    }
+	return isRectTouching(&aRect , &bRect);
 }
 
 bool isRectTouching (SDL_Rect* aRect, SDL_Rect* bRect)
@@ -203,9 +176,9 @@ std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle) {
 	points.push_back(pt);
 
 	pt.x = rect.w / 2; pt.y = rect.h / 2;
-
-	translatept( &points , pt , angle , pos);
-
+	if (angle != 0) {
+		translatept( &points , pt , angle , pos);
+	}
 	return points;
 }
 
@@ -241,5 +214,5 @@ bool isWholeRectInside (SDL_Rect small, SDL_Rect big ) {
 }
 
 double distance (SDL_Point p1 , SDL_Point p2) {
-	return sqrt ( pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2) );
+	return SDL_sqrt ( SDL_pow(p2.x - p1.x, 2) + SDL_pow(p2.y - p1.y, 2) );
 }

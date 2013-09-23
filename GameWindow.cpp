@@ -15,8 +15,7 @@
 #include "util/vector.h"
 #include <vector>
 #include "util/AreaMap.h"
-
-
+#include "util/area.h"
 
 PlayerShip player = PlayerShip();
 Asteroid asteroid = Asteroid();
@@ -102,6 +101,13 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     pt_ast.x = 400; pt_ast.y = 300;
     asteroid.setPosition(pt_ast);
 
+    pt_ast.x = WIDTH/2; pt_ast.y = HIEGHT/2;
+    viewport.h = HIEGHT;
+    viewport.w = WIDTH;
+    viewport.x = 0;
+	viewport.y = 0;
+    std::cout << AreaOfPoints( RectToPoints(viewport , 0) , pt_ast.toSDLPoint()) << " "  << AreaOfRect(viewport) << std::endl;
+
     sprites.reserve(1000);
     unsigned int seed = SDL_GetTicks();
     srand( seed );
@@ -115,8 +121,8 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     	astro_b.h = (rand() * counter) % 64 + 32;
     	asrto.setBounds(astro_b);
     	asrto.generatePoints();
-    	pt_astro.x = (rand() * counter) % 800;
-		pt_astro.y = (rand() * counter) % 600;
+    	pt_astro.x = (rand() * counter) % 1600 - 800;
+		pt_astro.y = (rand() * counter) % 1200 - 600;
 
 		asrto.setPosition(pt_astro);
 
