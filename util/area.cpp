@@ -30,12 +30,8 @@ double AreaOfPoints ( std::vector<SDL_Point> points , SDL_Point center ) {
 		lengths[0] = ( distance(points[i] , points[in] ));
 		lengths[1] = ( distance(center , points[i] ) );
 		lengths[2] = ( distance(center , points[in] ) );
-		std::cout << i << " x:" << points[i].x << " y:" << points[i].y << std::endl;
-		std::cout << i-1 << " x:" << points[in].x << " y:" << points[in].y << std::endl;
-		std::cout << "C x:" << center.x << " y:" << center.y << std::endl;
 		//Sort list
 		std::sort (lengths.begin() , lengths.end() , double_gtr_sort );
-		std::cout << "a:" << lengths[0] << " b:" << lengths[1] << " c:" << lengths[2] << std::endl;
 
 		// http://upload.wikimedia.org/math/1/7/c/17c41c9c2a57227d91fb7921c6ef78f4.png
 		area += 0.25 * SDL_sqrt(
@@ -47,7 +43,6 @@ double AreaOfPoints ( std::vector<SDL_Point> points , SDL_Point center ) {
 	}
 	return area;
 }
-
 
 double AreaOfRect (SDL_Rect rect) {
 	return rect.w * rect.h;

@@ -38,7 +38,6 @@ GameWindow::GameWindow() {
      this->renderer = nullptr;
 
      this->quit = false;
-
      this->CAP_FPS = true;
      this->FPS_MAX = 60;
      this->CURRENT_FPS = 0;
