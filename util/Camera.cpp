@@ -66,4 +66,4 @@ void Camera::BoxMoveWithSprite(sprite* sp) {
 	} else {
 
 	}
-	}
+}

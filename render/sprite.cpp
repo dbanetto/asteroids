@@ -18,6 +18,7 @@ sprite::sprite() {
 
 sprite::~sprite() {
      // TODO Auto-generated destructor stub
+	this->point_bounds.clear();
 }
 
 void sprite::render (double delta , SDL_Renderer* rednerer, SDL_Point CameraOffset)

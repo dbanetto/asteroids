@@ -21,6 +21,8 @@ public:
 	std::vector<sprite*> getSpritesFromArea (SDL_Rect Area);
 
 	SDL_Rect getArea();
+
+	void clear();
 protected:
 	SDL_Rect area;
 	std::vector<sprite*>  sprites;

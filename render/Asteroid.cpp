@@ -31,6 +31,8 @@ Asteroid::Asteroid() : sprite() {
 
 Asteroid::~Asteroid() {
 	// TODO Auto-generated destructor stub
+	this->point_bounds.clear();
+	this->points.clear();
 }
 
 void Asteroid::generatePoints() {

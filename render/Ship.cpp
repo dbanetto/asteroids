@@ -86,6 +86,9 @@ Ship::~Ship() {
 		//If the query is a  successes then the texture still exists
 		SDL_DestroyTexture(this->texture);
 	}
+	this->boundary_points.clear();
+	this->point_bounds.clear();
+	this->render_points.clear();
 }
 
 void Ship::generateTexture(SDL_Renderer* renderer) {

@@ -16,12 +16,15 @@
 #include <vector>
 #include "util/AreaMap.h"
 #include "util/area.h"
+#include "io/Settings.h"
+#include <stdlib.h>
 
 PlayerShip player = PlayerShip();
-Asteroid asteroid = Asteroid();
 
 std::vector<Asteroid> sprites;
 AreaMap sprite_map;
+
+Settings settings;
 
 GameWindow::GameWindow() {
      if ( SDL_Init(SDL_INIT_EVERYTHING) == -1) {
@@ -48,6 +51,8 @@ GameWindow::GameWindow() {
      this->camera = Camera( viewport );
      this->SDL_SCREEN_FLAGS = SDL_INIT_EVERYTHING;
 
+
+     settings.open (SETTINGS_LOCATION);
 }
 
 GameWindow::~GameWindow() {
@@ -70,12 +75,27 @@ GameWindow::~GameWindow() {
 /// <returns></returns>
 int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Background , int SDL_SCREEN_FLAGS )
 {
+	settings.load(0);
+
     this->background = Background;
     this->title = TITLE;
     SDL_Rect viewport;
 	viewport.w = WIDTH; viewport.h = HIEGHT;
 	this->camera = Camera( viewport );
-    this->SDL_SCREEN_FLAGS = SDL_SCREEN_FLAGS;
+
+	this->SDL_SCREEN_FLAGS = 0;
+    if (settings.getBool( "screen.fullscreen" ) ) {
+    	this->SDL_SCREEN_FLAGS = this->SDL_SCREEN_FLAGS | SDL_WINDOW_FULLSCREEN_DESKTOP;
+	}
+
+    if (settings.exists( "screen.additionalflags" ) ) {
+		int additionalflags = settings.getInt("screen.additionalflags");
+    	if (additionalflags != 0) {
+    		this->SDL_SCREEN_FLAGS |= additionalflags;
+    	}
+	}
+
+    this->SDL_SCREEN_FLAGS |= SDL_SCREEN_FLAGS;
 
     //Create Window
     this->window = SDL_CreateWindow (this->title
@@ -83,7 +103,7 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     				, SDL_WINDOWPOS_UNDEFINED
     				, viewport.w
     				, viewport.h
-    				, SDL_SCREEN_FLAGS );
+    				, this->SDL_SCREEN_FLAGS );
     //Make sure it was created correctly
     if (this->window == nullptr) {
          std::cout << "An error has occurred" << std::endl;
@@ -91,8 +111,11 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
         return 1;
     }
 
+    //Renderer Settings
+
     //Create Renderer
     this->renderer = SDL_CreateRenderer (this->window , -1 , SDL_RENDERER_ACCELERATED );
+
     //Make sure it was created correctly
     if (this->renderer == nullptr) {
          std::cout << "An error has occurred" << std::endl;
@@ -100,17 +123,6 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
         return 1;
     }
     this->inited = true;
-
-    Point pt_ast;
-    pt_ast.x = 400; pt_ast.y = 300;
-    asteroid.setPosition(pt_ast);
-
-    pt_ast.x = WIDTH/2; pt_ast.y = HIEGHT/2;
-    viewport.h = HIEGHT;
-    viewport.w = WIDTH;
-    viewport.x = 0;
-	viewport.y = 0;
-    std::cout << AreaOfPoints( RectToPoints(viewport , 0) , pt_ast.toSDLPoint()) << " "  << AreaOfRect(viewport) << std::endl;
 
     sprites.reserve(1000);
     unsigned int seed = SDL_GetTicks();
@@ -207,13 +219,13 @@ void GameWindow::Start() {
 
 void GameWindow::Render(double delta) {
      player.render(delta , renderer , this->camera.getCameraOffset());
-     asteroid.render (delta , renderer , this->camera.getCameraOffset());
 
      std::vector<sprite*> render_sprites = sprite_map.getSpritesFromArea(this->camera.getViewPort());
      for (unsigned int i = 0; i < render_sprites.size(); i++ ) {
     	 Asteroid* a_ptr = static_cast<Asteroid *>(render_sprites[i]);
     	 a_ptr->render(delta , renderer , this->camera.getCameraOffset());
      }
+     render_sprites.clear();
 
 }
 
@@ -228,7 +240,6 @@ void GameWindow::Update(double delta) {
      const Uint8* state = SDL_GetKeyboardState(NULL);
      player.input(state,delta);
      player.update(delta);
-     asteroid.update (delta);
      //Update Title
      std::stringstream ss;
      ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER
@@ -263,9 +274,6 @@ void GameWindow::Event (SDL_Event e , double delta)
 			}
 			if (e.key.keysym.sym == SDLK_n) {
 				this->FPS_MAX = 60;
-			}
-			if (e.key.keysym.sym == SDLK_h) {
-				asteroid.generatePoints();
 			}
             break;
     }

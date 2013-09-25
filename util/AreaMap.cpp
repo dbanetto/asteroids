@@ -28,6 +28,7 @@ AreaMap::AreaMap() {
 
 AreaMap::~AreaMap() {
 	// TODO Auto-generated destructor stub
+	this->clear();
 }
 
 AreaMap::AreaMap(AreaMap* Parent , SDL_Rect Area) {
@@ -116,4 +117,12 @@ void AreaMap::split() {
 		}
 	}
 	this->sprites = leftovers;
+}
+
+void AreaMap::clear() {
+	this->sprites.clear();
+	for (unsigned int n = 0; n < this->children.size(); n++) {
+		this->children[n].clear();
+	}
+	this->children.clear();
 }
