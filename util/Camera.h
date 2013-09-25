@@ -20,6 +20,8 @@ public:
 	SDL_Point getCameraOffset();
 	SDL_Rect  getViewPort();
 
+	void setViewPort(SDL_Rect new_viewport);
+
 	void BoxMoveWithSprite (sprite* sp);
 
 	virtual ~Camera();

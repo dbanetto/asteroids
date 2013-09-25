@@ -83,19 +83,20 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
 	viewport.w = WIDTH; viewport.h = HIEGHT;
 	this->camera = Camera( viewport );
 
-	this->SDL_SCREEN_FLAGS = 0;
-    if (settings.getBool( "screen.fullscreen" ) ) {
+
+	this->SDL_SCREEN_FLAGS = SDL_SCREEN_FLAGS;
+	//Get window settings
+	//Check if fullscreen is enabled
+	if (settings.getBool( "screen.fullscreen" ) ) {
     	this->SDL_SCREEN_FLAGS = this->SDL_SCREEN_FLAGS | SDL_WINDOW_FULLSCREEN_DESKTOP;
 	}
-
+	//Check if any extras are added
     if (settings.exists( "screen.additionalflags" ) ) {
 		int additionalflags = settings.getInt("screen.additionalflags");
     	if (additionalflags != 0) {
     		this->SDL_SCREEN_FLAGS |= additionalflags;
     	}
 	}
-
-    this->SDL_SCREEN_FLAGS |= SDL_SCREEN_FLAGS;
 
     //Create Window
     this->window = SDL_CreateWindow (this->title
@@ -104,6 +105,8 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     				, viewport.w
     				, viewport.h
     				, this->SDL_SCREEN_FLAGS );
+    SDL_SetWindowMinimumSize( this->window ,640,480);
+
     //Make sure it was created correctly
     if (this->window == nullptr) {
          std::cout << "An error has occurred" << std::endl;
@@ -276,5 +279,14 @@ void GameWindow::Event (SDL_Event e , double delta)
 				this->FPS_MAX = 60;
 			}
             break;
+        case (SDL_WINDOWEVENT):
+        	if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
+        		SDL_Rect t = this->camera.getViewPort();
+        		t.w = e.window.data1;
+        		t.h = e.window.data2;
+        		this->camera.setViewPort(t);
+        	}
+        	break;
+
     }
 }

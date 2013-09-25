@@ -67,3 +67,7 @@ void Camera::BoxMoveWithSprite(sprite* sp) {
 
 	}
 }
+
+void Camera::setViewPort(SDL_Rect new_rect) {
+	this->viewport = new_rect;
+}
