@@ -22,7 +22,6 @@ public:
     void update (double delta);
 
 protected:
-	SDL_Point center;
 	std::vector<SDL_Point> points;
 
 

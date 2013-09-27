@@ -10,8 +10,9 @@
 
 #include <vector>
 #include "../util/Point.h"
+#include "ISprite.h"
 
-class sprite {
+class sprite : public ISprite {
 public:
      sprite();
      virtual ~sprite();

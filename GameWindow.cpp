@@ -223,10 +223,10 @@ void GameWindow::Start() {
 void GameWindow::Render(double delta) {
      player.render(delta , renderer , this->camera.getCameraOffset());
 
-     std::vector<sprite*> render_sprites = sprite_map.getSpritesFromArea(this->camera.getViewPort());
+     std::vector<ISprite*> render_sprites = sprite_map.getSpritesFromArea(this->camera.getViewPort());
      for (unsigned int i = 0; i < render_sprites.size(); i++ ) {
-    	 Asteroid* a_ptr = static_cast<Asteroid *>(render_sprites[i]);
-    	 a_ptr->render(delta , renderer , this->camera.getCameraOffset());
+    	 //Asteroid* a_ptr = static_cast<Asteroid *>(render_sprites[i]);
+    	 render_sprites[i]->render(delta , renderer , this->camera.getCameraOffset());
      }
      render_sprites.clear();
 

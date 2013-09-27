@@ -36,7 +36,7 @@ AreaMap::AreaMap(AreaMap* Parent , SDL_Rect Area) {
 	this->area = Area;
 }
 
-void AreaMap::insert(sprite* sp) {
+void AreaMap::insert(ISprite* sp) {
 	if (this->sprites.size() > 4 || this->children.size() == 4) {
 		//Haven't split yet, might as well
 		if (this->children.size() != 4) {
@@ -54,8 +54,8 @@ void AreaMap::insert(sprite* sp) {
 	//Gives up on passing onto the children and keeps it
 	this->sprites.push_back(sp);
 }
-std::vector<sprite*> AreaMap::getSpritesFromArea (SDL_Rect Area) {
-	std::vector<sprite*> output;
+std::vector<ISprite*> AreaMap::getSpritesFromArea (SDL_Rect Area) {
+	std::vector<ISprite*> output;
 	for (unsigned int i = 0; i < this->sprites.size(); i++) {
 		if ( isRectTouching( this->sprites[i]->getBounds() , Area ) ) {
 			output.push_back(this->sprites[i]);
@@ -64,7 +64,7 @@ std::vector<sprite*> AreaMap::getSpritesFromArea (SDL_Rect Area) {
 	for (unsigned int n = 0; n < this->children.size(); n++) {
 		//Make sure the child has a chance of having the area
 		if ( isRectTouching( this->children[n].getArea() , Area ) ) {
-			std::vector<sprite*> sp = this->children[n].getSpritesFromArea(Area);
+			std::vector<ISprite*> sp = this->children[n].getSpritesFromArea(Area);
 			output.insert(output.end(), sp.begin(), sp.end());
 		}
 	}
@@ -101,7 +101,7 @@ void AreaMap::split() {
 		new_area.x = this->area.x + new_area.w; new_area.y = this->area.y + new_area.h;
 		this->children.push_back( AreaMap( this ,  new_area ) );
 	}
-	std::vector<sprite*> leftovers;
+	std::vector<ISprite*> leftovers;
 	for (unsigned int i = 0; i < this->sprites.size(); i++) {
 		//Keep track of sprites that are not giving to children
 		bool taken = false;
