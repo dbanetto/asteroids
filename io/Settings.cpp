@@ -114,17 +114,38 @@ std::string Settings::get (const char * setting) {
 }
 
 bool  Settings::getBool (std::string  key) {
-	return  ( this->get(key) == "true" ? true : false );
+	std::string b = this->get(key);
+	if (b != "") {
+		return  ( b == "true" ? true : false );
+	} else {
+		return false;
+	}
 }
 bool  Settings::getBool (const char * key) {
-	return  ( this->get(key) == "true" ? true : false );
+	std::string b = this->get(key);
+	if (b != "") {
+		return  ( b == "true" ? true : false );
+	} else {
+		return false;
+	}
 }
 
 int Settings::getInt (std::string  key) {
-	return atoi( this->get(key).c_str() );
+	std::string b = this->get(key);
+	if (b != "") {
+		return atoi( this->get(key).c_str() );
+	} else {
+		return -1;
+	}
 }
+
 int Settings::getInt (const char * key) {
-	return atoi( this->get(key).c_str() );
+	std::string b = this->get(key);
+	if (b != "") {
+		return atoi( this->get(key).c_str() );
+	} else {
+		return -1;
+	}
 }
 
 
