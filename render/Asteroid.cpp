@@ -44,10 +44,11 @@ void Asteroid::generatePoints() {
 	this->points.reserve(points + 1);
 
 	SDL_Point center;
+	//const maximum size of an asteroid
 	center.x = 32;
 	center.y = 32;
-	//Start random number gen
-	//srand( time(NULL) );
+
+	//srand() is not used to give the asteroid some chance of being unique
 
 	for (float angle = 0; angle < 2 * M_PI; angle += steps) {
 
@@ -83,7 +84,7 @@ void Asteroid::generatePoints() {
 	this->center.x = this->bounds.w/2;
 	this->center.y = this->bounds.h/2;
 
-
+	area = AreaOfPoints( this->point_bounds , this->center );
 }
 
 void Asteroid::generateTexture(SDL_Renderer* renderer) {
@@ -108,7 +109,9 @@ void Asteroid::render (double delta , SDL_Renderer* renderer , SDL_Point CameraO
 
 void Asteroid::update (double delta)
 {
-	this->angle += 6 * delta ;
+	this->angle += 12 * delta ;
+
+	this->setAngle(angle);
 	this->UPDATE_TRANSLATION = true;
      if (this->UPDATE_TRANSLATION) {
 

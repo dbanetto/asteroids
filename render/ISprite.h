@@ -31,6 +31,8 @@ public:
 	virtual std::vector<SDL_Point>* getPointBounds () = 0;
 	virtual SDL_Point* getPointBoundsArray () = 0;
 
+
+	virtual double getArea() = 0;
 protected:
      SDL_Rect  bounds;
      SDL_Rect  render_bounds;
@@ -38,7 +40,7 @@ protected:
      SDL_Point center;
      std::vector<SDL_Point> point_bounds;
      bool UPDATE_TRANSLATION;
-
+     double area;
      double angle;
 };
 

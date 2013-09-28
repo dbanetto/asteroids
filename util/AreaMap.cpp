@@ -126,3 +126,51 @@ void AreaMap::clear() {
 	}
 	this->children.clear();
 }
+
+bool AreaMap::remove (ISprite* sp) {
+	bool result = false;
+	for (unsigned int i = 0; i < this->sprites.size(); i++) {
+		if (this->sprites[i] == sp) {
+			this->sprites.erase(this->sprites.begin() + i);
+			result = true;
+			//Check if the node has children
+			if (this->children.size() > 0) {
+				//Count if the children have objects
+				int count = 0;
+				for (unsigned int n = 0; n < this->children.size(); n++) {
+					count += this->children[n].count();
+					//Shortcut out
+					if (count > 0) {
+						break;
+					}
+				}
+				//If there are no object then delete the unneeded children
+				if (count == 0) {
+					this->children.clear();
+				}
+			}
+
+		}
+	}
+	for (unsigned int n = 0; n < this->children.size(); n++) {
+		//Check if the sprite belongs to this child's area
+		if ( isWholeRectInside( sp->getBounds() ,this->children[n].getArea() ) ) {
+			result = this->children[n].remove(sp);
+		}
+	}
+	return result;
+}
+
+void AreaMap::update (ISprite* sp) {
+	this->remove(sp);
+	this->insert(sp);
+}
+
+int AreaMap::count() {
+	int count = this->sprites.size();
+	for (unsigned int n = 0; n < this->children.size(); n++) {
+		count += this->children[n].count();
+	}
+
+	return count;
+}

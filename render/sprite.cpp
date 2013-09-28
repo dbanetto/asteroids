@@ -80,3 +80,6 @@ void   sprite::setAngle(double a){
 	this->UPDATE_TRANSLATION = true;
 }
 
+double sprite::getArea () {
+	return this->area;
+}

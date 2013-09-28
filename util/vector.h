@@ -26,7 +26,9 @@ bool isPolygonInsidePolygon(std::vector<SDL_Point> pt , std::vector<SDL_Point> p
 bool isRectTouching (SDL_Rect* rect1, SDL_Rect* rect2);
 bool isRectTouching (SDL_Rect rect1, SDL_Rect rect2);
 bool isWholeRectInside (SDL_Rect small, SDL_Rect big );
+
 bool isSpriteTouchingSprite (sprite sp1 , sprite sp2);
+
 
 std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle);
 

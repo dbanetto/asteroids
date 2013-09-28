@@ -10,6 +10,7 @@
 
 #include "render.h"
 #include "../util/vector.h"
+#include "../util/area.h"
 
 Ship::Ship(SHIP_CONTROLLER controller) {
 	// TODO Auto-generated constructor stub
@@ -77,6 +78,8 @@ Ship::Ship(SHIP_CONTROLLER controller) {
 	this->render_bounds = this->bounds;
 	this->center.x = 32; this->center.y = 32;
 	this->angle = 0;
+
+	area = AreaOfPoints( this->point_bounds , this->center );
 
 }
 

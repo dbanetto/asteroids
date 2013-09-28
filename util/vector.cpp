@@ -24,7 +24,9 @@ std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point cente
      //Pre-calculate sin and cos as they will not change
      double a_sin = 0;
      double a_cos = 1;
-     if (angle != 0) {
+     if (angle == 180) {
+    	 a_cos = -1;
+     } else if (angle != 0) {
     	 a_sin = sin( (angle / 180.0) * M_PI );
     	 a_cos = cos( (angle / 180.0) * M_PI );
      }
@@ -34,15 +36,20 @@ std::vector<SDL_Point> translate (std::vector<SDL_Point> points, SDL_Point cente
           pt.x = (points[i].x - center.x);
           pt.y = (points[i].y - center.y);
           //No rotational translation needed if angle = 0
-          if (angle != 0) {
+          double py = pt.y; double px = pt.x;
+          if (angle == 180) {
         	  //Rotate the point around the origin by angle degrees
-        	  int py = pt.y; int px = pt.x;
+			  pt.x = round(-px - py*a_sin);
+			  pt.y = round(px*a_sin - py);
+          } else if (angle != 0) {
+        	  //Rotate the point around the origin by angle degrees
+
 			  pt.x = round(px*a_cos - py*a_sin);
 			  pt.y = round(px*a_sin + py*a_cos);
           }
           //Returning the points back to before the origin change
-          pt.x = pt.x + center.x + offset.x;
-          pt.y = pt.y + center.y + offset.y;
+          pt.x += center.x + offset.x;
+          pt.y += center.y + offset.y;
 
           //Add them to the output list
           n_points.push_back(pt);
@@ -54,33 +61,37 @@ void translatept (std::vector<SDL_Point>* points, SDL_Point center , double angl
 {
      //Pre-calculate sin and cos as they will not change
 	double a_sin = 0;
-	double a_cos = 1;
-	if (angle != 0) {
-		a_sin = sin( (angle / 180.0) * M_PI );
-		a_cos = cos( (angle / 180.0) * M_PI );
-	}
-	for (unsigned int i = 0; i < (*points).size(); i++) {
-		SDL_Point pt;
-		//Offset so the center is the origin of the points
-		pt.x = ((*points)[i].x - center.x);
-		pt.y = ((*points)[i].y - center.y);
+	     double a_cos = 1;
+	     if (angle == 180) {
+	    	 a_cos = -1;
+	     } else if (angle != 0) {
+	    	 a_sin = sin( (angle / 180.0) * M_PI );
+	    	 a_cos = cos( (angle / 180.0) * M_PI );
+	     }
+	     for (unsigned int i = 0; i < (*points).size(); i++) {
+	          SDL_Point pt;
+	          //Offset so the center is the origin of the points
+	          pt.x = ((*points)[i].x - center.x);
+	          pt.y = ((*points)[i].y - center.y);
+	          //No rotational translation needed if angle = 0
+	          double py = pt.y; double px = pt.x;
+	          if (angle == 180) {
+	        	  //Rotate the point around the origin by angle degrees
+				  pt.x = round(-px - py*a_sin);
+				  pt.y = round(px*a_sin - py);
+	          } else if (angle != 0) {
+	        	  //Rotate the point around the origin by angle degrees
 
-        //No rotational translation needed if angle = 0
-        if (angle != 0) {
-      	  //Rotate the point around the origin by angle degrees
-      	  int py = pt.y; int px = pt.x;
-		  pt.x = round(px*a_cos - py*a_sin);
-		  pt.y = round(px*a_sin + py*a_cos);
-        }
+				  pt.x = round(px*a_cos - py*a_sin);
+				  pt.y = round(px*a_sin + py*a_cos);
+	          }
+	          //Returning the points back to before the origin change
+	          pt.x += center.x + offset.x;
+	          pt.y += center.y + offset.y;
 
-		//Returning the points back to before the origin change
-		pt.x = pt.x + center.x + offset.x;
-		pt.y = pt.y + center.y + offset.y;
-
-		//Edit the points in the list
-		(*points)[i].x = pt.x;
-		(*points)[i].y = pt.y;
-	}
+	          //Add them to the output list
+	          (*points)[i] = pt;
+	     }
 }
 
 /*
@@ -157,6 +168,8 @@ bool isSpriteTouchingSprite (sprite sp1 , sprite sp2)
 	return false;
 }
 
+
+
 std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle) {
 	std::vector<SDL_Point> points;
 	points.reserve(4);
@@ -177,7 +190,7 @@ std::vector<SDL_Point> RectToPoints (SDL_Rect rect , double angle) {
 
 	pt.x = rect.w / 2; pt.y = rect.h / 2;
 	if (angle != 0) {
-		translatept( &points , pt , angle , pos);
+		points = translate( points , pt , angle , pos);
 	}
 	return points;
 }

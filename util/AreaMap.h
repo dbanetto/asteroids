@@ -19,11 +19,19 @@ public:
 	virtual ~AreaMap();
 
 	void insert(ISprite* sp);
+
 	std::vector<ISprite*> getSpritesFromArea (SDL_Rect Area);
+
+	bool remove (ISprite* sp);
+
+	void update (ISprite* sp);
 
 	SDL_Rect getArea();
 
 	void clear();
+
+	int count();
+
 protected:
 	SDL_Rect area;
 	std::vector<ISprite*>  sprites;

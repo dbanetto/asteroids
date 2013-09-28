@@ -23,6 +23,7 @@ public:
      void setBounds(SDL_Rect rect);
 
      double getAngle(void);
+     double getArea(void);
      void   setAngle(double angle);
 
      Point getPosition(void);
@@ -30,16 +31,6 @@ public:
      SDL_Point getCenter ();
      std::vector<SDL_Point>* getPointBounds ();
      SDL_Point* getPointBoundsArray ();
-
-protected:
-     SDL_Rect  bounds;
-     SDL_Rect  render_bounds;
-     Point     position;
-     SDL_Point center;
-     std::vector<SDL_Point> point_bounds;
-     bool UPDATE_TRANSLATION;
-
-     double angle;
 };
 
 #endif /* SPRITE_H_ */

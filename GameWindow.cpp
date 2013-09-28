@@ -127,11 +127,13 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
     }
     this->inited = true;
 
-    sprites.reserve(1000);
+    sprites.reserve(50);
     unsigned int seed = SDL_GetTicks();
     srand( seed );
     Asteroid asrto;
-    for (int counter = 0; counter < 64; counter++) {
+
+    //WARNING if counter is a unsigned int BAD things happen
+    for (int counter = 0; counter < sprites.capacity(); counter++) {
     	srand( seed * counter );
     	asrto = Asteroid();
     	SDL_Rect astro_b;
@@ -146,24 +148,18 @@ int GameWindow::Init(const char* TITLE ,int WIDTH, int HIEGHT , SDL_Color Backgr
 		asrto.setPosition(pt_astro);
 
 		sprites.push_back(asrto);
-		sprite_map.insert(&(sprites[counter]));
+		ISprite* sp = static_cast<ISprite*> ( &sprites[counter] );
+		sprite_map.insert(sp);
     }
 
     return 0;
 }
 
 void GameWindow::Start() {
-    /*
-	Timer tester = Timer();
-    int c_tests = 0;
-    int tests = 1000000;
-    tester.start();
-	while (c_tests < tests) {
-		player.render(0.1 , renderer);
-		c_tests++;
-	}
-	std::cout << "is SDL_RenderDrawPoints = " << tester.get_ticks() << std::endl;
-	tester.stop();*/
+	SDL_SetRenderDrawColor(this->renderer, this->background.r, this->background.g, this->background.b, this->background.a);
+	SDL_RenderClear  (this->renderer);
+	SDL_RenderPresent(this->renderer);
+
 
 	//Update Thread
      Timer fps = Timer();
@@ -180,43 +176,49 @@ void GameWindow::Start() {
      //Start Delta
      delta.start();
      while (!this->quit) {  //While not quitting, UPDATE!
-          //Start counting frame time for capping
-          fps.start();
+		//Start counting frame time for capping
+		fps.start();
 
-          //RENDERS HERE
-          // change in time in seconds with game-time multiplier to edit game speed
-          double s_delta = (((double)(delta.get_ticks()) * GAMETIME_MULTIPLIER) / 1000.0)  + DBL_MIN;
-          this->Render(s_delta);
-          s_delta = (((double)(delta.get_ticks()) * GAMETIME_MULTIPLIER) / 1000.0)  + DBL_MIN;
-          this->Update(s_delta);
-          //Restart Delta
-          delta.start();
-          //Reset background colour
-          SDL_SetRenderDrawColor(this->renderer, this->background.r, this->background.g, this->background.b, this->background.a);
-          //Copy back buffer to Screen
-          SDL_RenderPresent(this->renderer);
-          SDL_RenderClear  (this->renderer);
+		//RENDERS HERE
+		// change in time in seconds with game-time multiplier to edit game speed
+		double s_delta = (((double)(delta.get_ticks()) * GAMETIME_MULTIPLIER) / 1000.0)  + DBL_MIN;
+		this->Render(s_delta);
 
-          //Mid Render Check for exit
-          if (this->quit)
-               break;
+		SDL_SetRenderDrawColor(this->renderer, this->background.r, this->background.g, this->background.b, this->background.a);
+		//Copy back buffer to Screen
 
-          //Increment frame count
-          counter_frames++;
 
-          //Check if Capping is needed
-          if( this->CAP_FPS && ( fps.get_ticks() < 1000 / this->FPS_MAX ) ) //If time less then allocated
-          {
-               //Sleep the remaining allocated frame time
-               SDL_Delay( ( 1000 / this->FPS_MAX ) - fps.get_ticks() );
-          }
+		s_delta = (((double)(delta.get_ticks()) * GAMETIME_MULTIPLIER) / 1000.0)  + DBL_MIN;
+		this->Update(s_delta);
 
-          if (counter.get_ticks() > 1000) { //1 second worth of frames collected
-               this->CURRENT_FPS = counter_frames / ( counter.get_ticks() / 1000.0 );
+		SDL_RenderPresent(this->renderer);
+		SDL_RenderClear  (this->renderer);
 
-               counter.start();
-               counter_frames = 0;
-          }
+		//Restart Delta
+		delta.start();
+		//Reset background colour
+
+
+		//Mid Render Check for exit
+		if (this->quit)
+		   break;
+
+		//Increment frame count
+		counter_frames++;
+
+		//Check if Capping is needed
+		if( this->CAP_FPS && ( fps.get_ticks() < 1000 / this->FPS_MAX ) ) //If time less then allocated
+		{
+		   //Sleep the remaining allocated frame time
+		   SDL_Delay( ( 1000 / this->FPS_MAX ) - fps.get_ticks() );
+		}
+
+		if (counter.get_ticks() > 1000) { //1 second worth of frames collected
+		   this->CURRENT_FPS = counter_frames / ( counter.get_ticks() / 1000.0 );
+
+		   counter.start();
+		   counter_frames = 0;
+		}
      }
 }
 
@@ -237,8 +239,11 @@ void GameWindow::Update(double delta) {
      while (SDL_PollEvent(&event)) {
           this->Event(event , delta);
      }
+     sprite_map.clear();
      for (unsigned int i = 0; i < sprites.size(); i++ ) {
     	 sprites[i].update(delta);
+    	 ISprite* sp = static_cast<ISprite*> ( &sprites[i] );
+    	 sprite_map.insert(sp);
      }
      const Uint8* state = SDL_GetKeyboardState(NULL);
      player.input(state,delta);
