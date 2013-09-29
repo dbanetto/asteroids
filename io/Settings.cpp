@@ -95,7 +95,7 @@ void Settings::load ( std::fstream&  file , unsigned int flag) {
 	}
 
 	//Seek to the beginning of the file
-	this->fs.seekg( 0 , file.beg );
+	file.seekg( 0 , file.beg );
 	std::string line;
 	while ( ! file.eof() ) {
 		//Get the current line
