@@ -78,29 +78,50 @@ bool Settings::exists (const char * setting) {
 }
 
 void Settings::load(unsigned int flag) {
+	this->load(this->fs , flag);
+}
+
+void Settings::load(std::string file , unsigned int flag) {
+	std::fstream f;
+	f.open(file.c_str());
+	this->load( f , flag);
+	f.close();
+}
+
+void Settings::load ( std::fstream&  file , unsigned int flag) {
 	//Check if the file is open
 	if (!this->fs.is_open()) {
 		return;
 	}
 
 	//Seek to the beginning of the file
-	this->fs.seekg( 0 , this->fs.beg );
+	this->fs.seekg( 0 , file.beg );
 	std::string line;
-	while ( ! this->fs.eof() ) {
+	while ( ! file.eof() ) {
 		//Get the current line
-		std::getline ( this->fs, line );
+		std::getline ( file, line );
+		if (line.length() == 0)
+			continue;
 		line = trim(line);
+
 		//Treat lines starting with # as comments and do not process
-		if (line[0] == '#' || line.length() == 0) {
+		if (line[0] == '#') {
 			continue;
 		}
+
 		//Find the equal part of the line
 		std::size_t equal_pos = line.find_first_of('=', 0);
 
 		std::string key = trim ( line.substr( 0 , equal_pos ) );
 		std::string value = trim ( line.substr( equal_pos + 1  , line.length() - 1 ) );
 
-
+		if (line[0] == '@') {
+			if (key == "@include") {
+				//Include another file
+				this->load ( value , flag );
+				continue;
+			}
+		}
 
 		if (this->stored_settings.count( key ) > 0 ) {
 			//There is another copy of the key, check if it is OK to override

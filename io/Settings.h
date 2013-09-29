@@ -42,6 +42,8 @@ class Settings {
 
 		// Load all the settings in the file
 		void load (unsigned int flag);
+		void load ( std::string  file , unsigned int flag);
+		void load ( std::fstream&  file , unsigned int flag);
 
 		bool exists (std::string  setting);
 		bool exists (const char * setting);
