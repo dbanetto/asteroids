@@ -19,7 +19,9 @@
 enum SettingsSplits {
 	SETTING_SPLIT_STARTSWITH= 0
    ,SETTING_SPLIT_ENDSWITH  = 1
+#ifdef SETTINGS_REGEX_ENABLED
    ,SETTING_SPLIT_REGEX     = 4
+#endif
 };
 
 class Settings {

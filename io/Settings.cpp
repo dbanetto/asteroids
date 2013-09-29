@@ -9,8 +9,10 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef SETTINGS_REGEX_ENABLED
 #include <regex>
-#include <regex.h>
+#endif
 
 typedef std::map<std::string , std::string>::iterator map_ss_itr;
 
@@ -188,14 +190,16 @@ std::map<std::string , std::string> Settings::split ( std::string key , Settings
 					output[iterator->first] = iterator->second;
 				}
 				break;
+#ifdef SETTINGS_REGEX_ENABLED
 			case (SETTING_SPLIT_REGEX):
 				std::regex regx (key);
-
-				if (std::regex_search (iterator->first.begin() , iterator->first.end() , regx)) {
+				std::smatch  m;
+				if (std::regex_search (iterator->first , m , regx)) {
 					output[iterator->first] = iterator->second;
 				}
 
 				break;
+#endif
 		}
 	}
 
