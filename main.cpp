@@ -22,7 +22,7 @@ int main (int argc , char* args[]) {
 		return -1;
 	}
 	set.load(0);
-
+	set.split( "screen" , SETTING_SPLIT_STARTSWITH);
 	GameWindow main = GameWindow();
 	main.Init("Asteroids"
 		,  set.getInt("screen.width")

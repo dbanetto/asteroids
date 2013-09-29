@@ -8,14 +8,25 @@
 #include "Settings.h"
 #include <iostream>
 #include <stdlib.h>
+#include <string.h>
+#include <regex>
+#include <regex.h>
+
+typedef std::map<std::string , std::string>::iterator map_ss_itr;
 
 static const std::string& whitespace = " \t\0";
 
 std::string trim (std::string str);
+bool endswith (std::string str,std::string  suffix);
+bool startswith (std::string str,std::string  prefix);
+
 
 Settings::Settings() {
 	// TODO Auto-generated constructor stub
+}
 
+Settings::Settings(const std::map<std::string , std::string> settings) {
+	this->stored_settings = settings;
 }
 
 Settings::~Settings() {
@@ -23,6 +34,7 @@ Settings::~Settings() {
 	if (this->fs.is_open()) {
 		this->fs.close();
 	}
+	this->stored_settings.clear();
 }
 
 
@@ -148,10 +160,71 @@ int Settings::getInt (const char * key) {
 	}
 }
 
+bool Settings::add (std::string key , std::string value) {
+	if (!this->exists(key)) {
+	this->stored_settings[key] = value;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void Settings::set (std::string key , std::string value) {
+	this->stored_settings[key] = value;
+}
+
+std::map<std::string , std::string> Settings::split ( std::string key , SettingsSplits splittype ) {
+	std::map<std::string , std::string> output;
+
+	for (map_ss_itr iterator = this->stored_settings.begin(); iterator != this->stored_settings.end(); iterator++ ) {
+		switch (splittype) {
+			case (SETTING_SPLIT_ENDSWITH) :
+				if ( endswith( iterator->first , key )  ) {
+					output[iterator->first] = iterator->second;
+				}
+				break;
+			case (SETTING_SPLIT_STARTSWITH):
+				if ( startswith( iterator->first , key )  ) {
+					output[iterator->first] = iterator->second;
+				}
+				break;
+			case (SETTING_SPLIT_REGEX):
+				std::regex regx (key);
+
+				if (std::regex_search (iterator->first.begin() , iterator->first.end() , regx)) {
+					output[iterator->first] = iterator->second;
+				}
+
+				break;
+		}
+	}
+
+	return output;
+}
+
 
 std::string trim (std::string str) {
 	//Remove trailing whitespace
 	int strBegin = str.find_first_not_of(whitespace);
 	int strEnd = str.find_last_not_of(whitespace);
 	return str.substr(strBegin,  strEnd - strBegin + 1);
+}
+
+bool endswith (std::string str,std::string  suffix) {
+	if( str == "" || suffix == "" )
+	    return false;
+
+	  if(suffix.length() > str.length())
+	    return false;
+
+	  return 0 == strncmp( str.c_str() + str.length() - suffix.length(), suffix.c_str() , suffix.length() );
+}
+bool startswith (std::string str,std::string  prefix) {
+	if( str == "" || prefix == "" )
+		return false;
+
+	if(prefix.length() > str.length())
+		return false;
+
+	return 0 == strncmp( str.c_str(), prefix.c_str() , prefix.length() );
 }
