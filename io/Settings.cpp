@@ -89,6 +89,7 @@ void Settings::load(unsigned int flag) {
 	while ( ! this->fs.eof() ) {
 		//Get the current line
 		std::getline ( this->fs, line );
+		line = trim(line);
 		//Treat lines starting with # as comments and do not process
 		if (line[0] == '#' || line.length() == 0) {
 			continue;
