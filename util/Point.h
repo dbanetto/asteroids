@@ -19,9 +19,9 @@ public:
 
 	SDL_Point toSDLPoint();
 
-	Point operator= (const Point& p);
-	Point operator+ (const Point& p);
-	Point operator- (const Point& p);
+	void operator= (const Point& p);
+	void operator+ (const Point& p);
+	void operator- (const Point& p);
 };
 
 double Distance (Point* p1 , Point* p2);
