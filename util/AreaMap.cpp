@@ -134,7 +134,7 @@ bool AreaMap::remove (ISprite* sp) {
 			this->sprites.erase(this->sprites.begin() + i);
 			result = true;
 			//Check if the node has children
-			if (this->children.size() > 0) {
+			if (this->children.size() > 0 && this->parent != nullptr) {
 				//Count if the children have objects
 				int count = 0;
 				for (unsigned int n = 0; n < this->children.size(); n++) {
@@ -144,7 +144,7 @@ bool AreaMap::remove (ISprite* sp) {
 						break;
 					}
 				}
-				//If there are no object then delete the unneeded children
+				//If there are no object then <strike>kill</strike> delete the unneeded children
 				if (count == 0) {
 					this->children.clear();
 				}
@@ -162,12 +162,16 @@ bool AreaMap::remove (ISprite* sp) {
 }
 
 void AreaMap::update (ISprite* sp) {
+	//Remove the sprite pointer
 	this->remove(sp);
+	//Insert it again
 	this->insert(sp);
 }
 
 int AreaMap::count() {
+	//Get own sprite count
 	int count = this->sprites.size();
+	//Ask Children if they have any
 	for (unsigned int n = 0; n < this->children.size(); n++) {
 		count += this->children[n].count();
 	}
