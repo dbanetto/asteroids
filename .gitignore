@@ -1,2 +1,9 @@
 /Debug
 /Release
+<<<<<<< HEAD
+/.settings
+=======
+/obj
+*.o
+/bin
+>>>>>>> branch 'master' of https://github.com/ronaldrager/asteroids.git

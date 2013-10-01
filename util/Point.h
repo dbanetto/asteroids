@@ -10,18 +10,19 @@
 
 #include "SDL2/SDL.h"
 
-class Point {
+class Point
+{
 public:
-	Point();
-	Point(double x, double y);
-	virtual ~Point();
-	double x , y;
+    Point();
+    Point(double x, double y);
+    virtual ~Point();
+    double x , y;
 
-	SDL_Point toSDLPoint();
+    SDL_Point toSDLPoint();
 
-	void operator= (const Point& p);
-	void operator+ (const Point& p);
-	void operator- (const Point& p);
+    void operator= (const Point& p);
+    void operator+ (const Point& p);
+    void operator- (const Point& p);
 };
 
 double Distance (Point* p1 , Point* p2);

@@ -10,17 +10,18 @@
 
 #include "Ship.h"
 
-class PlayerShip: public Ship {
+class PlayerShip: public Ship
+{
 public:
-	PlayerShip();
-	virtual ~PlayerShip();
-	void update (double delta);
+    PlayerShip();
+    virtual ~PlayerShip();
+    void update (double delta);
 
-	void input (const Uint8* keys, double delta);
+    void input (const Uint8* keys, double delta);
 private:
-	Point momentum;
-	double TURN_RATE;
-	double MOMENTUM_RATE;
+    Point momentum;
+    double TURN_RATE;
+    double MOMENTUM_RATE;
 };
 
 #endif /* PLAYERSHIP_H_ */

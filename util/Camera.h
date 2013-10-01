@@ -11,22 +11,23 @@
 #include "SDL2/SDL.h"
 #include "../render/sprite.h"
 
-class Camera {
+class Camera
+{
 public:
-	Camera();
-	Camera(SDL_Rect view_port);
-	void chase (sprite* sp);
+    Camera();
+    Camera(SDL_Rect view_port);
+    void chase (sprite* sp);
 
-	SDL_Point getCameraOffset();
-	SDL_Rect  getViewPort();
+    SDL_Point getCameraOffset();
+    SDL_Rect  getViewPort();
 
-	void setViewPort(SDL_Rect new_viewport);
+    void setViewPort(SDL_Rect new_viewport);
 
-	void BoxMoveWithSprite (sprite* sp);
+    void BoxMoveWithSprite (sprite* sp);
 
-	virtual ~Camera();
+    virtual ~Camera();
 private:
-	SDL_Rect viewport;
+    SDL_Rect viewport;
 };
 
 #endif /* CAMERA_H_ */

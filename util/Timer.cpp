@@ -4,7 +4,7 @@
 Timer::Timer()
 {
     //Initialize the variables
-     this->startTicks = 0;
+    this->startTicks = 0;
     this->pausedTicks = 0;
     this->paused = false;
     this->started = false;
@@ -13,7 +13,7 @@ Timer::Timer()
 void Timer::start()
 {
     //Start the timer
-     this->started = true;
+    this->started = true;
 
     //Unpause the timer
     this->paused = false;
@@ -26,7 +26,7 @@ void Timer::start()
 void Timer::stop()
 {
     //Stop the timer
-     this->started = false;
+    this->started = false;
 
     //Unpause the timer
     this->paused = false;
@@ -51,10 +51,10 @@ void Timer::unpause()
     if( this->paused == true )
     {
         //Unpause the timer
-         this->paused = false;
+        this->paused = false;
 
         //Reset the starting ticks
-         this->startTicks = SDL_GetTicks() - this->pausedTicks;
+        this->startTicks = SDL_GetTicks() - this->pausedTicks;
 
         //Reset the paused ticks
         pausedTicks = 0;

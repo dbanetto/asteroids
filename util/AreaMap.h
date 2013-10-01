@@ -12,33 +12,34 @@
 #include "../render/ISprite.h"
 #include <vector>
 
-class AreaMap {
+class AreaMap
+{
 public:
-	AreaMap();
-	AreaMap(AreaMap* Parent , SDL_Rect Area);
-	virtual ~AreaMap();
+    AreaMap();
+    AreaMap(AreaMap* Parent , SDL_Rect Area);
+    virtual ~AreaMap();
 
-	void insert(ISprite* sp);
+    void insert(ISprite* sp);
 
-	std::vector<ISprite*> getSpritesFromArea (SDL_Rect Area);
+    std::vector<ISprite*> getSpritesFromArea (SDL_Rect Area);
 
-	bool remove (ISprite* sp);
+    bool remove (ISprite* sp);
 
-	void update (ISprite* sp);
+    void update (ISprite* sp);
 
-	SDL_Rect getArea();
+    SDL_Rect getArea();
 
-	void clear();
+    void clear();
 
-	int count();
+    int count();
 
 protected:
-	SDL_Rect area;
-	std::vector<ISprite*>  sprites;
-	std::vector<AreaMap> children;
-	AreaMap* parent;
+    SDL_Rect area;
+    std::vector<ISprite*>  sprites;
+    std::vector<AreaMap> children;
+    AreaMap* parent;
 private:
-	void split();
+    void split();
 };
 
 #endif /* AREAMAP_H_ */
