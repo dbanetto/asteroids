@@ -29,6 +29,7 @@ class Settings
 {
 public:
     Settings();
+    Settings( Settings& settings );
     Settings(const std::map<std::string , std::string> settings);
     virtual ~Settings();
 

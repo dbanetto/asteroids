@@ -38,25 +38,6 @@ int main (int argc , char* args[])
 		, bg
 		, SDL_WINDOW_OPENGL);
 
-    if (!set.open(SETTINGS_LOCATION))
-    {
-        std::cout << "Settings ( settings.ini ) file did not load" << std::endl;
-        return -1;
-    }
-    set.load(0);
-    if ( !set.exists("screen.width") || !set.exists("screen.height") )
-    {
-        std::cout << "Settings ( settings.ini ) file did not contain screen dimensions" << std::endl;
-        return -2;
-    }
-
-    GameWindow main = GameWindow();
-    main.Init("Asteroids"
-              ,  set.getInt("screen.width")
-              ,  set.getInt("screen.height")
-              , bg
-              , SDL_WINDOW_OPENGL);
-
     set.close();
     set.clear();
 

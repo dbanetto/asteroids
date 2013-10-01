@@ -23,6 +23,7 @@ public:
     void operator= (const Point& p);
     void operator+ (const Point& p);
     void operator- (const Point& p);
+    void operator* (const int& p);
 };
 
 double Distance (Point* p1 , Point* p2);

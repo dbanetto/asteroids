@@ -10,6 +10,7 @@
 #include <vector>
 #include "SDL2/SDL.h"
 #include "sprite.h"
+#include "../io/Settings.h"
 
 enum SHIP_CONTROLLER
 {
@@ -31,14 +32,19 @@ public:
     virtual void render (double delta , SDL_Renderer* rednerer , SDL_Point CameraOffset);
     virtual void update (double delta);
 
-
+    Point getVelicoty ();
+    Settings getShipSettings ();
 protected:
     std::vector<SDL_Point> render_points;
 
     std::vector<SDL_Point> boundary_points;
     SHIP_CONTROLLER controller;
-    //Angle measured in degrees
 
+    Point velicoty;
+    double TURN_RATE;
+    double VELICOTY_RATE;
+
+    Settings ship_settings;
 private:
     SDL_Texture* texture;
     bool RENDER_TEXTURE;

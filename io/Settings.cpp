@@ -22,6 +22,9 @@ std::string trim (std::string str);
 bool endswith (std::string str,std::string  suffix);
 bool startswith (std::string str,std::string  prefix);
 
+Settings::Settings( Settings& setting ) {
+
+}
 
 Settings::Settings()
 {

@@ -9,6 +9,8 @@
 #define PLAYERSHIP_H_
 
 #include "Ship.h"
+#include <vector>
+#include "Bullet.h"
 
 class PlayerShip: public Ship
 {
@@ -16,12 +18,11 @@ public:
     PlayerShip();
     virtual ~PlayerShip();
     void update (double delta);
-
+    void render (double delta , SDL_Renderer* renderer , SDL_Point CameraOffset);
     void input (const Uint8* keys, double delta);
 private:
-    Point momentum;
-    double TURN_RATE;
-    double MOMENTUM_RATE;
+    std::vector<Bullet> bullets;
+
 };
 
 #endif /* PLAYERSHIP_H_ */

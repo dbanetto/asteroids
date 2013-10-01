@@ -35,7 +35,6 @@ void Point::operator= (const Point& p)
 {
     this->x = p.x;
     this->y = p.y;
-
 }
 void Point::operator+ (const Point& p)
 {
@@ -46,6 +45,11 @@ void Point::operator- (const Point& p)
 {
     this->x -= p.x;
     this->y -= p.y;
+}
+
+void Point::operator* (const int& p) {
+	this->x *= p;
+	this->y *= p;
 }
 
 SDL_Point Point::toSDLPoint()

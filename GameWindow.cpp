@@ -19,7 +19,7 @@
 #include "io/Settings.h"
 #include <stdlib.h>
 
-PlayerShip player = PlayerShip();
+PlayerShip player;
 
 std::vector<Asteroid> sprites;
 AreaMap sprite_map;
@@ -265,27 +265,6 @@ void GameWindow::Render(double delta)
     render_sprites.clear();
 
 }
-
-
-void GameWindow::Update(double delta) {
-     SDL_Event event;
-     while (SDL_PollEvent(&event)) {
-          this->Event(event , delta);
-     }
-     sprite_map.clear();
-     for (unsigned int i = 0; i < sprites.size(); i++ ) {
-    	 sprites[i].update(delta);
-    	 ISprite* sp = static_cast<ISprite*> ( &sprites[i] );
-    	 sprite_map.insert(sp);
-     }
-     const Uint8* state = SDL_GetKeyboardState(NULL);
-     player.input(state,delta);
-     player.update(delta);
-     //Update Title
-     std::stringstream ss;
-     ss << "Asteroids @ " << this->CURRENT_FPS << "fps" << " (x" << this->GAMETIME_MULTIPLIER
-    		 << ")" << " sprite count:" << sprites.size();
-     SDL_SetWindowTitle(this->window , ss.str().c_str());
 
 void GameWindow::Update(double delta)
 {

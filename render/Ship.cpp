@@ -14,6 +14,9 @@
 
 Ship::Ship(SHIP_CONTROLLER controller)
 {
+	this->VELICOTY_RATE = 0;
+	this->TURN_RATE = 0;
+
     // TODO Auto-generated constructor stub
     this->controller = controller;
     this->texture = nullptr;
@@ -153,4 +156,8 @@ void Ship::update (double delta)
         this->setPosition(this->position);
         this->UPDATE_TRANSLATION = false;
     }
+}
+
+Settings Ship::getShipSettings () {
+	return this->ship_settings;
 }
