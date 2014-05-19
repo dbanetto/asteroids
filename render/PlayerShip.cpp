@@ -28,6 +28,7 @@ void PlayerShip::render(double delta , SDL_Renderer* renderer , SDL_Point Camera
     for (unsigned int i = 0; i < this->bullets.size(); i++) {
     	this->bullets[i].render(delta , renderer, CameraOffset);
     }
+    Ship::render( delta , renderer , CameraOffset);
 }
 
 void PlayerShip::update(double delta)
