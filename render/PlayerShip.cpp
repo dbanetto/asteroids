@@ -38,7 +38,13 @@ void PlayerShip::update(double delta)
     this->position.y += (this->velicoty.y * delta);
     this->setPosition(this->position);
     for (unsigned int i = 0; i < this->bullets.size(); i++) {
-    	this->bullets[i].update(delta);
+    	auto bullet_pos = this->bullets[i].getPosition();
+    	if (position.Distance( &(bullet_pos) , &(this->position) ) > 1000 )
+    	{
+    		this->bullets.erase( this->bullets.begin() + i );
+    	} else {
+    		this->bullets[i].update(delta);
+    	}
     }
     this->Ship::update(delta);
 }

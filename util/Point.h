@@ -24,8 +24,10 @@ public:
     void operator+ (const Point& p);
     void operator- (const Point& p);
     void operator* (const int& p);
+
+    static double Distance (Point* p1 , Point* p2);
 };
 
-double Distance (Point* p1 , Point* p2);
+
 
 #endif /* POINT_H_ */

@@ -161,3 +161,8 @@ void Ship::update (double delta)
 Settings Ship::getShipSettings () {
 	return this->ship_settings;
 }
+
+Point Ship::getVelicoty()
+{
+	return this->velicoty;
+}
